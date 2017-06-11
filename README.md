@@ -1,13 +1,13 @@
-# Rapid
+# Rapido
 
-Rapid is a simple module library that can be included into your Rails controllers to dry up a standard, RESTful API.
+Rapido is a simple module library that can be included into your Rails controllers to dry up a standard, RESTful API.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'rapid'
+gem 'rapido'
 ```
 
 And then execute:
@@ -16,11 +16,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install rapid
+    $ gem install rapido
 
 ## Usage
 
-Simply including the Rapid::Controller module into your controller is all you need to do if:
+Simply including the Rapido::Controller module into your controller is all you need to do if:
 
 1. Odd controller name: your controller's name follows the standard [Resource.pluralize]Controller format.
 1. Odd controller methods: you don't need any additional API endpoints other then the standard REST create/show/index/delete/update endpoints.
@@ -34,7 +34,7 @@ If for some reason your controller name does not follow the standard format, you
 
 ```
 class MyOddlyNamedWidgetController < ApplicationController
-  include Rapid::Controller
+  include Rapido::Controller
 
   private
 
@@ -51,7 +51,7 @@ If you have endpoints other than create, show, index, update, and delete, you ca
 
 ```
 class WidgetsController < ApplicationController
-  include Rapid::Controller
+  include Rapido::Controller
 
   def spin
     resource.spin!
@@ -80,5 +80,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rapid.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jskirst/rapido.
 

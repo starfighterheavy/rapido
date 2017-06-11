@@ -1,4 +1,4 @@
-module Rapid
+module Rapido
   module Controller
 
   rescue_from ActiveRecord::RecordNotFound do |e|

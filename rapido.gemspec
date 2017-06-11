@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rapid/version'
+require 'rapido/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "rapid"
-  spec.version       = Rapid::VERSION
+  spec.name          = "Rapido"
+  spec.version       = rapido::VERSION
   spec.authors       = ["Jonathan Kirst"]
   spec.email         = ["jskirst@gmail.com"]
 
   spec.summary       = %q{Rails API Dryer}
   spec.description   = %q{Opinionated RESTfull API controller library.}
-  spec.homepage      = "https://github.com/jskirst/rapid"
+  spec.homepage      = "https://github.com/jskirst/rapido"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
