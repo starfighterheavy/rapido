@@ -102,7 +102,6 @@ module Rapido
           .page(params[:page])
       end
 
-      
       def resource_owner_name
         return self.class.resource_owner_name if self.class.resource_owner_name
         @resource_owner_name ||= resource_owner.class.name.underscore
