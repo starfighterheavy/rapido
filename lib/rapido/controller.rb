@@ -1,9 +1,23 @@
+require 'active_support'
+require 'active_support/core_ext'
+require 'active_support/rescuable'
+
 module Rapido
   module Controller
+    extend ActiveSupport::Concern
 
-  rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { errors: [ e.to_s ] }, status: 404
-  end
+    included do
+      rescue_from ActiveRecord::RecordNotFound do |e|
+        render json: { errors: [ e.to_s ] }, status: 404
+      end
+    end
+
+    class_methods do
+      def resource_owner_name(name = nil)
+        @resource_owner_name = name.to_s if name
+        @resource_owner_name
+      end
+    end
 
     def index
       render json: { resource_name.pluralize => resource_collection.map(&:to_h), meta: index_meta }
@@ -88,11 +102,7 @@ module Rapido
           .page(params[:page])
       end
 
-      def self.resource_owner_name(name = nil)
-        @resource_owner_name = name.to_s if name
-        @resource_owner_name
-      end
-
+      
       def resource_owner_name
         return self.class.resource_owner_name if self.class.resource_owner_name
         @resource_owner_name ||= resource_owner.class.name.underscore

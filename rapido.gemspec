@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rapido/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "Rapido"
+  spec.name          = "rapido"
   spec.version       = Rapido::VERSION
   spec.authors       = ["Jonathan Kirst"]
   spec.email         = ["jskirst@gmail.com"]
