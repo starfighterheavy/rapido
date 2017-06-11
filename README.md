@@ -66,7 +66,7 @@ If your resources has a `belongs_to` relationship that is reflected in the API r
 
 ```
 class WidgetsController < ApplicationController
-  include Radid::Controller
+  include Radido::Controller
 
   resource_owner_name :widget_factory
 end
