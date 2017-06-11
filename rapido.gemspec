@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jonathan Kirst"]
   spec.email         = ["jskirst@gmail.com"]
 
-  spec.summary       = %q{Rails API Dryer}
+  spec.summary       = %q{Rails API Dryer-o}
   spec.description   = %q{Opinionated RESTfull API controller library.}
   spec.homepage      = "https://github.com/jskirst/rapido"
 
