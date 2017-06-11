@@ -5,9 +5,10 @@ require 'rapido/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "Rapido"
-  spec.version       = rapido::VERSION
+  spec.version       = Rapido::VERSION
   spec.authors       = ["Jonathan Kirst"]
   spec.email         = ["jskirst@gmail.com"]
+  spec.license       = 'MIT'
 
   spec.summary       = %q{Rails API Dryer-o}
   spec.description   = %q{Opinionated RESTfull API controller library.}
