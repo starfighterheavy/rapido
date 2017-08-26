@@ -1,5 +1,7 @@
 # Rapido
 
+[![Code Climate](https://codeclimate.com/github/starfighterheavy/rapido/badges/gpa.svg)](https://codeclimate.com/github/starfighterheavy/rapido)
+
 Rapido is a simple module library that can be included into your Rails controllers to dry up a standard, RESTful API.
 
 ## Installation
