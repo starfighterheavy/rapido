@@ -1,5 +1,5 @@
 class Hydrospanner < ActiveRecord::Base
-  belongs_to :account
+  belongs_to :toolbox
 
   def to_h
     {

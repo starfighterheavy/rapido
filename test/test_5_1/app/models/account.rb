@@ -1,3 +1,4 @@
 class Account < ActiveRecord::Base
-  has_many :hydrospanners
+  has_many :toolboxes
+  has_many :hydrospanners, through: :toolboxes
 end

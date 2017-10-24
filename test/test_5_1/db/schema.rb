@@ -10,13 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024145815) do
+ActiveRecord::Schema.define(version: 20171024212701) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "api_key", null: false
   end
 
   create_table "hydrospanners", force: :cascade do |t|
+    t.string "name"
+    t.integer "toolbox_id"
+  end
+
+  create_table "toolboxes", force: :cascade do |t|
     t.integer "account_id"
     t.string "name"
   end

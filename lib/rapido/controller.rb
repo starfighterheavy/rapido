@@ -6,24 +6,44 @@ module Rapido
   module Controller
     extend ActiveSupport::Concern
 
+    class_methods do
+      def owner_class(str)
+        @owner_class = str.to_sym
+      end
+
+      def owner_foreign_key(key)
+        @owner_foreign_key = key.to_sym
+      end
+
+      def owner_lookup_param(str)
+        @owner_lookup_param = str.to_sym
+      end
+
+      def owner_lookup_field(str)
+        @owner_lookup_field = str.to_sym
+      end
+
+      def resource_class(str)
+        @resource_class = str.to_sym
+      end
+
+      def resource_lookup_param(str)
+        @resource_lookup_param = str.to_sym
+      end
+
+      def resource_permitted_params(ary)
+        @resource_permitted_params = ary.map(&:to_sym)
+      end
+    end
+
     included do
       rescue_from ActiveRecord::RecordNotFound do |e|
         render json: { errors: [ e.to_s ] }, status: 404
       end
     end
 
-    class_methods do
-      def resource_owner_name(name)
-        @resource_owner_name = name
-      end
-
-      def resource_param_name(name)
-        @resource_param_name = name
-      end
-    end
-
     def index
-      render json: { resource_name.pluralize => resource_collection.map(&:to_h), meta: index_meta }
+      render json: resource_collection.map(&:to_h)
     end
 
     def show
@@ -40,12 +60,13 @@ module Rapido
     end
 
     def destroy
+      resource_hsh = resource.to_h
       resource.destroy
-      render json: resource.to_h
+      render json: resource_hsh
     end
 
     def update
-      resource.assign_attributes(resource_update_params)
+      resource.assign_attributes(resource_params)
       if resource.save
         render json: resource.to_h
       else
@@ -55,101 +76,78 @@ module Rapido
 
     private
 
-      def index_meta
-        {
-          pagination: {
-            per_page: resource_collection.limit_value,
-            total_pages: resource_collection.total_pages,
-            total_objects: resource_collection.count,
-          }
-        }
+      def resource_permitted_params
+        @resource_permitted_params ||=
+          self.class.instance_variable_get(:@resource_permitted_params)
       end
 
-      def resource_required_param
-        resource_name.to_sym
-      end
-
-      def resource_create_permitted_params
-        []
-      end
-
-      def resource_update_permitted_params
-        []
-      end
-
-      def resource_update_params
-        params
-          .require(resource_required_param)
-          .permit(resource_update_permitted_params)
-      end
-
-      def resource_create_params
-        params
-          .require(resource_required_param)
-          .permit(resource_create_permitted_params)
-      end
-
-      def build_resource_params
-        {
-          resource_owner_reference.to_sym => resource_owner.id
-        }.merge(resource_create_params)
+      def resource_params
+        params.require(resource_class_name).permit(resource_permitted_params)
       end
 
       def build_resource
-        resource_class.new(build_resource_params)
+        owner.send(resource_class_name.pluralize).new(resource_params)
       end
 
       def resource_collection
         resource_class
-          .where("#{resource_owner_reference} = ?", resource_owner.id)
+          .where("#{owner_foreign_key} = ?", owner.id)
           .page(params[:page])
       end
 
-      def resource_owner_name
-        @resource_owner_name ||= self.class.instance_variable_get(:@resource_owner_name)
+      def owner_class
+        @owner_class ||=
+          self.class.instance_variable_get(:@owner_class).to_s.camelize.constantize
       end
 
-      def resource_owner_class
-        @resource_owner_class ||= resource_owner_name.to_s.camelize.constantize
+      def owner_class_name
+        @owner_class_name ||= owner_class.name
       end
 
-      def resource_owner_reference
-        "#{resource_owner_name}_id"
+      def owner_foreign_key
+        @owner_foreign_key ||=
+          (self.class.instance_variable_get(:@owner_foreign_key) ||
+          "#{owner_class_name}_id").to_s
       end
 
-      def resource_owner
-        @resource_owner ||= resource_owner_class.find(params[resource_owner_reference])
+      def owner_lookup_param
+        @owner_lookup_param ||=
+          (self.class.instance_variable_get(:@owner_lookup_param) || owner_foreign_key).to_s
+      end
+
+      def owner_lookup_field
+        @owner_lookup_field ||=
+          (self.class.instance_variable_get(:@owner_lookup_field) || owner_lookup_param).to_s
+      end
+
+      def owner
+        @owner ||= owner_class.find_by(owner_lookup_field => params[owner_lookup_param])
       end
 
       def resource
         @resource ||=
           resource_class
-            .where("#{resource_owner_reference} = ?", resource_owner.id)
-            .find_by(resource_param_name => params[resource_param_name])
+            .where("#{owner_foreign_key} = ?", owner.id)
+            .find_by(resource_lookup_param => params[resource_lookup_param])
       end
 
-      def resource_param_name
-        @resource_param_name ||=
-          self.class.instance_variable_get(:@resource_param_name) || :id
-      end
-
-      def resource_reference
-        "#{resource_name}_id"
+      def resource_lookup_param
+        @resource_lookup_param ||=
+          self.class.instance_variable_get(:@resource_lookup_param) || :id
       end
 
       def resource_class
         @resource_class ||=
-          resource_controller_class.constantize
+          (self.class.instance_variable_get(:@resource_class) ||
+          resource_class_from_controller).to_s.camelize.constantize
       end
 
-      def resource_name(name = nil)
-        return @resource_name = name if name
-        @resource_name ||= resource_controller_class.underscore
+      def resource_class_name(name = nil)
+        @resource_class_name ||= resource_class.name.underscore
       end
 
-      def resource_controller_class
-        @resource_controller_class ||=
-          self.class.name.split('::')[-1].remove('Controller').singularize
+      def resource_class_from_controller
+        self.class.name.split('::')[-1].remove('Controller').singularize.underscore
       end
 
       class ResourceOwnerNameNotSpecified < StandardError; end
