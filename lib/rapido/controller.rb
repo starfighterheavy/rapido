@@ -13,9 +13,12 @@ module Rapido
     end
 
     class_methods do
-      def resource_owner_name(name = nil)
-        @resource_owner_name = name.to_s if name
-        @resource_owner_name
+      def resource_owner_name(name)
+        @resource_owner_name = name
+      end
+
+      def resource_param_name(name)
+        @resource_param_name = name
       end
     end
 
@@ -30,7 +33,7 @@ module Rapido
     def create
       new_resource = build_resource
       if new_resource.save
-        render json: new_resource.to_h
+        render json: new_resource.to_h, status: :created
       else
         render json: { errors: new_resource.errors.full_messages }, status: 422
       end
@@ -38,7 +41,7 @@ module Rapido
 
     def destroy
       resource.destroy
-      head :ok
+      render json: resource.to_h
     end
 
     def update
@@ -103,12 +106,11 @@ module Rapido
       end
 
       def resource_owner_name
-        return self.class.resource_owner_name if self.class.resource_owner_name
-        @resource_owner_name ||= resource_owner.class.name.underscore
+        @resource_owner_name ||= self.class.instance_variable_get(:@resource_owner_name)
       end
 
       def resource_owner_class
-        @resource_owner_class ||= resource_owner_name.camelize.constantize
+        @resource_owner_class ||= resource_owner_name.to_s.camelize.constantize
       end
 
       def resource_owner_reference
@@ -123,7 +125,12 @@ module Rapido
         @resource ||=
           resource_class
             .where("#{resource_owner_reference} = ?", resource_owner.id)
-            .find(params[:id])
+            .find_by(resource_param_name => params[resource_param_name])
+      end
+
+      def resource_param_name
+        @resource_param_name ||=
+          self.class.instance_variable_get(:@resource_param_name) || :id
       end
 
       def resource_reference
