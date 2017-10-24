@@ -12,6 +12,10 @@ require "action_cable/engine"
 # require "sprockets/railtie"
 require "rails/test_unit/railtie"
 
+rapido_path = File.expand_path("../../../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path(rapido_path, __FILE__)
+require 'rapido'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

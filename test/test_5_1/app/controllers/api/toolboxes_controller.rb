@@ -8,6 +8,6 @@ class Api::ToolboxesController < Api::ApplicationController
   private
 
   def owner
-    @account
+    @authority
   end
 end

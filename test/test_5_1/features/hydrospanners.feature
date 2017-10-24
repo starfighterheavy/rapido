@@ -14,7 +14,7 @@ Feature: Hydrospanners
     Then the JSON response should be:
     """
     {
-      "error": "Invalid api_key."
+      "error": "Request denied."
     }
     """
     And the response status should be "401"
