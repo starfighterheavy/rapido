@@ -21,7 +21,7 @@ module Rapido
       def owner_lookup_param(str)
         @owner_lookup_param = str.to_sym
       end
-
+      
       def owner_lookup_field(str)
         @owner_lookup_field = str.to_sym
       end
@@ -45,7 +45,7 @@ module Rapido
         @resource_permitted_params ||=
           self.class.instance_variable_get(:@resource_permitted_params)
       end
-
+      
       def resource_params
         params.require(resource_class_name).permit(resource_permitted_params)
       end
