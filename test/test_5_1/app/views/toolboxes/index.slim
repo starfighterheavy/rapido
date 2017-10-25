@@ -1,4 +1,4 @@
-= link_to "New Thing", new_toolbox_path
+= link_to "New Toolbox", new_toolbox_path
 table
   thead
     tr
@@ -8,6 +8,6 @@ table
     tr
       - resource.keys.each_with_index do |key, index|
         - if index == 0
-          td= link_to resource[key], url_for([:edit, resource])
+          td= link_to resource.name, resource
         - else
           td= resource[key]

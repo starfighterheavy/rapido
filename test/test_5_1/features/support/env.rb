@@ -1,6 +1,7 @@
 require 'cucumber/rails'
 require 'rspec/matchers'
 require 'cucumber/api_steps'
+require 'spreewald/all_steps'
 
 ActionController::Base.allow_rescue = false
 

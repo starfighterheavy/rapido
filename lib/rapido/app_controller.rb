@@ -22,7 +22,7 @@ module Rapido
       if new_resource.save
         redirect_to new_resource
       else
-        flash[:error] = new_resource.errors.full_messages
+        flash[:error] = new_resource.errors.full_messages.join('. ')
         redirect_to new_resource
       end
     end
@@ -41,7 +41,7 @@ module Rapido
       if resource.save
         redirect_to resource
       else
-        flash[:errors] = resource.errors.full_messages
+        flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
         redirect_to url_for([:edit, resource])
       end

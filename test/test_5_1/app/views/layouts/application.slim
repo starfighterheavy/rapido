@@ -1,0 +1,19 @@
+html
+  head
+    title Test51
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  body
+    - flash.each do |key, value|
+      - next unless %w( alert success error notice ).include?(key)
+      - key = 'error' if key == 'alert'
+      div class="alert alert--#{key}"
+        div.row.flush
+          div.12u
+            = sanitize(value)
+            div.right-close
+              a onclick="$('.alert').hide()" X
+    = yield
