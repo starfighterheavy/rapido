@@ -1,83 +1,50 @@
 Feature: Toolboxes
 
   Background:
-    Given I am Andy Developer
-    And I send and accept JSON
+    Given I am Ben Franklin
+    And Martha Washington exists
+    And I go to the new user session page
+    And I fill in "Email" with "ben@franklin.com"
+    And I fill in "Password" with "Password1"
+    And I press "Log in"
 
-  Scenario: System blocks access to api without proper api_key
-    When I send a POST request to "/api/toolboxes?api_key=12345" with the following:
-    """
-    {
-      "name": "greatbox"
-    }
-    """
-    Then the JSON response should be:
-    """
-    {
-      "error": "Request denied."
-    }
-    """
-    And the response status should be "401"
+  Scenario: User can see all toolboxes
+    Then I should see "Okay Toolbox"
 
-  Scenario: Post a toolbox
-    When I send a POST request to "/api/toolboxes?api_key=ABCDE" with the following:
-    """
-    {
-      "name": "greatbox"
-    }
-    """
-    Then the JSON response should be:
-    """
-    {
-      "name": "greatbox"
-    }
-    """
-    And the response status should be "201"
+  Scenario: User can create toolbox
+    When I click on "New Toolbox"
+    And I fill in "Name" with "Great Toolbox"
+    And I press "Save"
+    Then I should see "Great Toolbox"
 
-  Scenario: Get all toolboxes
-    Given Betsy Developer exists
-    When I send a GET request to "/api/toolboxes?api_key=ABCDE" with the following:
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    [
-      {
-        "name": "okaybox"
-      }
-    ]
-    """
+  Scenario: System prevents a new toolbox without a name
+    When I click on "New Toolbox"
+    And I fill in "Name" with ""
+    And I press "Save"
+    Then I should see "Name can't be blank"
 
-  Scenario: Get a toolbox
-    When I send a GET request to "/api/toolboxes/okaybox?api_key=ABCDE"
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "okaybox"
-    }
-    """
+  Scenario: User can view toolbox
+    When I follow "Okay Toolbox"
+    And I should see "Okay Toolbox"
 
-  Scenario: Patch a toolbox
-    When I send a PATCH request to "/api/toolboxes/okaybox?api_key=ABCDE" with the following:
-    """
-    {
-      "name": "betterbox"
-    }
-    """
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "betterbox"
-    }
-    """
+  Scenario: User cannot view another user's toolbox
+    When I go directly to "/toolboxes/besttoolbox"
+    Then I should see "The page you were looking for doesn't exist."
 
-  Scenario: Delete a toolbox
-    When I send a DELETE request to "/api/toolboxes/okaybox?api_key=ABCDE"
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "okaybox"
-    }
-    """
+  Scenario: User can view toolbox
+    When I follow "Okay Toolbox"
+    And I should see "Okay Toolbox"
+
+  Scenario: User can edit and update a toolbox
+    When I follow "Okay Toolbox"
+    And I click on "Edit"
+    And I fill in "Name" with "Slightly Better Toolbox"
+    And I press "Save"
+    Then I should see "Slightly Better Toolbox"
+
+  Scenario: System prevents invalid update
+    When follow "Okay Toolbox"
+    When I click on "Edit"
+    And I fill in "Name" with ""
+    And I press "Save"
+    Then I should see "Name can't be blank"

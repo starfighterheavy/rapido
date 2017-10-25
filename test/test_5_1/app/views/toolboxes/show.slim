@@ -1,0 +1,5 @@
+h2= @resource.to_param
+
+= link_to "Edit", url_for([:edit, @resource])
+
+= link_to "Back", controller: params[:controller], action: "index"

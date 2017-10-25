@@ -1,10 +1,13 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_support/rescuable'
+require 'rapido/errors'
 
 module Rapido
   module Controller
     extend ActiveSupport::Concern
+
+    include Rapido::Errors
 
     class_methods do
       def owner_class(str)
@@ -36,44 +39,6 @@ module Rapido
       end
     end
 
-    included do
-      rescue_from ActiveRecord::RecordNotFound do |e|
-        render json: { errors: [ e.to_s ] }, status: 404
-      end
-    end
-
-    def index
-      render json: resource_collection.map(&:to_h)
-    end
-
-    def show
-      render json: resource.to_h
-    end
-
-    def create
-      new_resource = build_resource
-      if new_resource.save
-        render json: new_resource.to_h, status: :created
-      else
-        render json: { errors: new_resource.errors.full_messages }, status: 422
-      end
-    end
-
-    def destroy
-      resource_hsh = resource.to_h
-      resource.destroy
-      render json: resource_hsh
-    end
-
-    def update
-      resource.assign_attributes(resource_params)
-      if resource.save
-        render json: resource.to_h
-      else
-        render json: { errors: resource.errors.full_messages }, status: 422
-      end
-    end
-
     private
 
       def resource_permitted_params
@@ -90,18 +55,21 @@ module Rapido
       end
 
       def resource_collection
-        resource_class
-          .where("#{owner_foreign_key} = ?", owner.id)
-          .page(params[:page])
+        owner.send(resource_class_name.pluralize).page(params[:page])
       end
 
       def owner_class
-        @owner_class ||=
-          self.class.instance_variable_get(:@owner_class).to_s.camelize.constantize
+        @owner_class ||= begin
+          name = self.class.instance_variable_get(:@owner_class)
+          name.to_s.camelize.constantize
+        rescue NameError
+          binding.pry
+          raise BadOwnerClassName, name
+        end
       end
 
       def owner_class_name
-        @owner_class_name ||= owner_class.name
+        @owner_class_name ||= owner_class.name.downcase
       end
 
       def owner_foreign_key
@@ -121,14 +89,22 @@ module Rapido
       end
 
       def owner
-        @owner ||= owner_class.find_by(owner_lookup_field => params[owner_lookup_param])
+        @owner ||= begin
+           authority.send(owner_class_name.pluralize)
+                    .find_by(owner_lookup_field => params[owner_lookup_param])
+         rescue ActiveRecord::RecordNotFound
+           raise RecordNotFound
+         end
       end
 
       def resource
-        @resource ||=
+        @resource ||= begin
           resource_class
             .where("#{owner_foreign_key} = ?", owner.id)
-            .find_by(resource_lookup_param => params[resource_lookup_param])
+            .find_by!(resource_lookup_param => params[resource_lookup_param])
+        rescue ActiveRecord::RecordNotFound
+          raise RecordNotFound
+        end
       end
 
       def resource_lookup_param
@@ -149,7 +125,5 @@ module Rapido
       def resource_class_from_controller
         self.class.name.split('::')[-1].remove('Controller').singularize.underscore
       end
-
-      class ResourceOwnerNameNotSpecified < StandardError; end
   end
 end
