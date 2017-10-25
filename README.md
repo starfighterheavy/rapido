@@ -2,7 +2,18 @@
 
 [![Code Climate](https://codeclimate.com/github/starfighterheavy/rapido/badges/gpa.svg)](https://codeclimate.com/github/starfighterheavy/rapido)
 
-Rapido is a simple module library that can be included into your Rails controllers to dry up a standard, RESTful API.
+Rapido is a simple, highly opinionated library that can be included into your Rails controllers to dry up a standard, RESTful API.
+
+## First Principles
+
+1. Routes should not deeply nest resources
+2. Resources should not be referred to with auto-incrementing IDs.
+3. JSON should be sent and recieved.
+4. API keys should be placed in the URL.
+5. Resource should be returned by the API for all methods and in the same form.
+6. Resources should be represented at the root level in JSON without a container object.
+7. Getting resources should always be paginated.
+8. Complex business processes should be represented as resources, not special methods
 
 ## Installation
 
