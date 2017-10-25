@@ -7,7 +7,7 @@ module Rapido
         before_action :load_authority
 
         rescue_from LackAuthority do |e|
-          render json: { error: "Request denied." }, status: 401
+          render json: { error: 'Request denied.' }, status: 401
         end
       end
 
@@ -35,4 +35,3 @@ module Rapido
     end
   end
 end
-
