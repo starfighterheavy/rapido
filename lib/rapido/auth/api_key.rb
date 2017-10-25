@@ -34,7 +34,7 @@ module Rapido
       def authority
         @authority
       end
-      
+
       class LackAuthority < StandardError; end
     end
   end

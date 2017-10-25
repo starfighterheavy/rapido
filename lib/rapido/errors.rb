@@ -6,4 +6,3 @@ module Rapido
     class AuthorityIsNotDefined < StandardError; end
   end
 end
-
