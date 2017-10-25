@@ -1,5 +1,7 @@
 require 'rapido/version'
 require 'rapido/controller'
+require 'rapido/api_controller'
+require 'rapido/app_controller'
 require 'rapido/auth/api_key'
 
 module Rapido
