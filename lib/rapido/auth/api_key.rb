@@ -31,6 +31,10 @@ module Rapido
         raise LackAuthority unless @authority
       end
 
+      def authority
+        @authority
+      end
+
       class LackAuthority < StandardError; end
     end
   end

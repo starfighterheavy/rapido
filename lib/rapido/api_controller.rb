@@ -1,13 +1,16 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_support/rescuable'
+require 'rapido/errors'
 
 module Rapido
   module ApiController
     extend ActiveSupport::Concern
 
+    include Rapido::Errors
+
     included do
-      rescue_from ActiveRecord::RecordNotFound do |e|
+      rescue_from RecordNotFound do |e|
         render json: { errors: [ e.to_s ] }, status: 404
       end
     end

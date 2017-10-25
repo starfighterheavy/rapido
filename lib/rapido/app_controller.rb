@@ -1,9 +1,18 @@
 require 'active_support'
 require 'active_support/core_ext'
+require 'rapido/errors'
 
 module Rapido
   module AppController
     extend ActiveSupport::Concern
+
+    include Rapido::Errors
+
+    included do
+      rescue_from RecordNotFound do |e|
+        render file: 'public/404', status: :not_found, layout: false
+      end
+    end
 
     def index
       @resource_collection = resource_collection
@@ -44,16 +53,6 @@ module Rapido
         flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
         redirect_to url_for([:edit, resource])
-      end
-    end
-
-    private
-
-    def scoped_url_for(action, owner, resource)
-      begin
-        url_for([action, owner, resource])
-      rescue
-        url_for([action, resource])
       end
     end
   end

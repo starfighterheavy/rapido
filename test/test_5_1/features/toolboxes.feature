@@ -2,6 +2,7 @@ Feature: Toolboxes
 
   Background:
     Given I am Ben Franklin
+    And Martha Washington exists
     And I go to the new user session page
     And I fill in "Email" with "ben@franklin.com"
     And I fill in "Password" with "Password1"
@@ -22,11 +23,19 @@ Feature: Toolboxes
     And I press "Save"
     Then I should see "Name can't be blank"
 
-  Scenario: Employee can view toolbox
+  Scenario: User can view toolbox
     When I follow "Okay Toolbox"
     And I should see "Okay Toolbox"
 
-  Scenario: Employee can edit and update a toolbox
+  Scenario: User cannot view another user's toolbox
+    When I go directly to "/toolboxes/besttoolbox"
+    Then I should see "The page you were looking for doesn't exist."
+
+  Scenario: User can view toolbox
+    When I follow "Okay Toolbox"
+    And I should see "Okay Toolbox"
+
+  Scenario: User can edit and update a toolbox
     When I follow "Okay Toolbox"
     And I click on "Edit"
     And I fill in "Name" with "Slightly Better Toolbox"
