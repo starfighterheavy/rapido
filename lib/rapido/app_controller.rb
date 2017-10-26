@@ -29,7 +29,7 @@ module Rapido
     def create
       new_resource = build_resource
       if new_resource.save
-        redirect_to show_path(new_resource)
+        redirect_to after_create_path(new_resource)
       else
         flash[:error] = new_resource.errors.full_messages.join('. ')
         redirect_to new_resource
@@ -48,7 +48,7 @@ module Rapido
     def update
       resource.assign_attributes(resource_params)
       if resource.save
-        redirect_to show_path(resource)
+        redirect_to after_update_path(resource)
       else
         flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
@@ -74,6 +74,14 @@ module Rapido
 
     def show_path(resource)
       resource_path(:show, resource)
+    end
+
+    def after_create_path(resource)
+      show_path(resource)
+    end
+
+    def after_update_path(resource)
+      show_path(resource)
     end
   end
 end
