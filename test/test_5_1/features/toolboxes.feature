@@ -27,14 +27,6 @@ Feature: Toolboxes
     When I follow "Okay Toolbox"
     And I should see "Okay Toolbox"
 
-  Scenario: User cannot view another user's toolbox
-    When I go directly to "/toolboxes/besttoolbox"
-    Then I should see "The page you were looking for doesn't exist."
-
-  Scenario: User can view toolbox
-    When I follow "Okay Toolbox"
-    And I should see "Okay Toolbox"
-
   Scenario: User can edit and update a toolbox
     When I follow "Okay Toolbox"
     And I click on "Edit"
@@ -48,3 +40,9 @@ Feature: Toolboxes
     And I fill in "Name" with ""
     And I press "Save"
     Then I should see "Name can't be blank"
+
+  Scenario: User cand delete a toolbox
+    When I follow "Okay Toolbox"
+    When I click on "Delete"
+    Then I should see "Toolboxes"
+    And I should not see "Okay Toolbox"

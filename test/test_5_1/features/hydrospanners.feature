@@ -40,3 +40,10 @@ Feature: Hydrospanners
     And I fill in "Name" with ""
     And I press "Save"
     Then I should see "Name can't be blank"
+
+  Scenario: User cand delete a hydrospanner
+    When I follow "View Hydrospanners"
+    And I follow "mediocrehydrospanner"
+    When I click on "Delete"
+    Then I should see "Okay Toolbox"
+    And I should not see "mediorehydrospanner"
