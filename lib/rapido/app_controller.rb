@@ -38,7 +38,7 @@ module Rapido
 
     def destroy
       resource.destroy
-      redirect_to index_path
+      redirect_to after_delete_path(resource)
     end
 
     def edit
@@ -87,6 +87,10 @@ module Rapido
 
     def after_update_path(resource)
       show_path(resource)
+    end
+
+    def after_delete_path(*)
+      index_path
     end
   end
 end
