@@ -58,24 +58,22 @@ module Rapido
 
     private
 
-    def edit_path(resource)
+    def resource_path(action, resource)
       keys = {
         controller: params[:controller],
-        action: :edit,
+        action: action,
         resource_lookup_param => resource.send(resource_lookup_param)
       }
       keys[owner_lookup_param] = owner.send(owner_lookup_field) if owner_lookup_param.present?
       url_for(keys)
     end
 
+    def edit_path(resource)
+      resource_path(:edit, resource)
+    end
+
     def show_path(resource)
-      keys = {
-        controller: params[:controller],
-        action: :show,
-        resource_lookup_param => resource.send(resource_lookup_param)
-      }
-      keys[owner_lookup_param] = owner.send(owner_lookup_field) if owner_lookup_param.present?
-      url_for(keys)
+      resource_path(:show, resource)
     end
   end
 end
