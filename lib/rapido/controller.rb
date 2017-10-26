@@ -14,10 +14,6 @@ module Rapido
         @owner_class = str.to_sym
       end
 
-      def owner_foreign_key(key)
-        @owner_foreign_key = key.to_sym
-      end
-
       def owner_lookup_param(str)
         @owner_lookup_param = str.to_sym
       end
@@ -55,7 +51,10 @@ module Rapido
       end
 
       def resource_collection
-        owner.send(resource_class_name.pluralize).page(params[:page])
+        @resource_collection ||= begin
+          raise RecordNotFound unless owner
+          owner.send(resource_class_name.pluralize).page(params[:page])
+        end
       end
 
       def owner_class
@@ -63,7 +62,6 @@ module Rapido
           name = self.class.instance_variable_get(:@owner_class)
           name.to_s.camelize.constantize
         rescue NameError
-          binding.pry
           raise BadOwnerClassName, name
         end
       end
@@ -72,15 +70,9 @@ module Rapido
         @owner_class_name ||= owner_class.name.downcase
       end
 
-      def owner_foreign_key
-        @owner_foreign_key ||=
-          (self.class.instance_variable_get(:@owner_foreign_key) ||
-          "#{owner_class_name}_id").to_s
-      end
-
       def owner_lookup_param
         @owner_lookup_param ||=
-          (self.class.instance_variable_get(:@owner_lookup_param) || owner_foreign_key).to_s
+          self.class.instance_variable_get(:@owner_lookup_param).to_s
       end
 
       def owner_lookup_field
@@ -99,8 +91,8 @@ module Rapido
 
       def resource
         @resource ||= begin
-          resource_class
-            .where("#{owner_foreign_key} = ?", owner.id)
+          owner
+            .send(resource_class_name.pluralize)
             .find_by!(resource_lookup_param => params[resource_lookup_param])
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
