@@ -1,83 +1,42 @@
 Feature: Hydrospanners
 
   Background:
-    Given I am Andy Developer
-    And I send and accept JSON
+    Given I am Ben Franklin
+    And Martha Washington exists
+    And I go to the new user session page
+    And I fill in "Email" with "ben@franklin.com"
+    And I fill in "Password" with "Password1"
+    And I press "Log in"
+    And I follow "Okay Toolbox"
 
-  Scenario: System blocks access to api without proper api_key
-    When I send a POST request to "/api/toolboxes/okaybox/hydrospanners?api_key=12345" with the following:
-    """
-    {
-      "name": "greatspanner"
-    }
-    """
-    Then the JSON response should be:
-    """
-    {
-      "error": "Request denied."
-    }
-    """
-    And the response status should be "401"
+  Scenario: User can see all hydrospanners for a toolbox
+    When I follow "View Hydrospanners"
+    And I should see "mediocrehydrospanner"
 
-  Scenario: Post a Hydrospanner
-    When I send a POST request to "/api/toolboxes/okaybox/hydrospanners?api_key=ABCDE" with the following:
-    """
-    {
-      "name": "greatspanner"
-    }
-    """
-    Then the JSON response should be:
-    """
-    {
-      "name": "greatspanner"
-    }
-    """
-    And the response status should be "201"
+  Scenario: User can create a new hydrospanner for a toolbox
+    When I follow "View Hydrospanners"
+    And I follow "New Hydrospanner"
+    And I fill in "Name" with "BetterHydrospanner"
+    And I press "Save"
+    Then I should see "BetterHydrospanner"
 
-  Scenario: Get all Hydrospanners
-    Given Betsy Developer exists
-    When I send a GET request to "/api/toolboxes/okaybox/hydrospanners?api_key=ABCDE" with the following:
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    [
-      {
-        "name": "okayspanner"
-      }
-    ]
-    """
+  Scenario: User can view hydrospanner
+    When I follow "View Hydrospanners"
+    And I follow "mediocrehydrospanner"
+    And I should see "mediocrehydrospanner"
 
-  Scenario: Get a Hydrospanner
-    When I send a GET request to "/api/toolboxes/okaybox/hydrospanners/okayspanner?api_key=ABCDE"
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "okayspanner"
-    }
-    """
+  Scenario: User can edit and update a hydospanner
+    When I follow "View Hydrospanners"
+    And I follow "mediocrehydrospanner"
+    And I follow "Edit"
+    And I fill in "Name" with "SlightlyBetterHydrospanner"
+    And I press "Save"
+    Then I should see "SlightlyBetterHydrospanner"
 
-  Scenario: Patch a Hydrospanner
-    When I send a PATCH request to "/api/toolboxes/okaybox/hydrospanners/okayspanner?api_key=ABCDE" with the following:
-    """
-    {
-      "name": "betterspanner"
-    }
-    """
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "betterspanner"
-    }
-    """
-
-  Scenario: Delete a Hydrospanner
-    When I send a DELETE request to "/api/toolboxes/okaybox/hydrospanners/okayspanner?api_key=ABCDE"
-    Then the response status should be "200"
-    And the JSON response should be:
-    """
-    {
-      "name": "okayspanner"
-    }
-    """
+  Scenario: System prevents invalid update
+    When I follow "View Hydrospanners"
+    And I follow "mediocrehydrospanner"
+    When I follow "Edit"
+    And I fill in "Name" with ""
+    And I press "Save"
+    Then I should see "Name can't be blank"

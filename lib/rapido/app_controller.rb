@@ -23,13 +23,13 @@ module Rapido
     end
 
     def new
-      @new_resource = resource_class.new
+      @resource = owner.send(resource_class_name.pluralize).new
     end
 
     def create
       new_resource = build_resource
       if new_resource.save
-        redirect_to new_resource
+        redirect_to show_path(new_resource)
       else
         flash[:error] = new_resource.errors.full_messages.join('. ')
         redirect_to new_resource
@@ -48,12 +48,32 @@ module Rapido
     def update
       resource.assign_attributes(resource_params)
       if resource.save
-        redirect_to resource
+        redirect_to show_path(resource)
       else
         flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
-        redirect_to url_for([:edit, resource])
+        redirect_to edit_path(resource)
       end
+    end
+
+    private
+
+    def resource_path(action, resource)
+      keys = {
+        controller: params[:controller],
+        action: action,
+        resource_lookup_param => resource.send(resource_lookup_param)
+      }
+      keys[owner_lookup_param] = owner.send(owner_lookup_field) if owner_lookup_param.present?
+      url_for(keys)
+    end
+
+    def edit_path(resource)
+      resource_path(:edit, resource)
+    end
+
+    def show_path(resource)
+      resource_path(:show, resource)
     end
   end
 end
