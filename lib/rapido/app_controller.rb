@@ -32,13 +32,13 @@ module Rapido
         redirect_to after_create_path(new_resource)
       else
         flash[:error] = new_resource.errors.full_messages.join('. ')
-        redirect_to new_resource
+        redirect_to new_path
       end
     end
 
     def destroy
       resource.destroy
-      redirect_to index_controller_path
+      redirect_to index_path
     end
 
     def edit
@@ -58,12 +58,9 @@ module Rapido
 
     private
 
-    def resource_path(action, resource)
-      keys = {
-        controller: params[:controller],
-        action: action,
-        resource_lookup_param => resource.send(resource_lookup_param)
-      }
+    def resource_path(action, resource = nil)
+      keys = { controller: params[:controller], action: action }
+      keys[resource_lookup_param] = resource.send(resource_lookup_param) if resource
       keys[owner_lookup_param] = owner.send(owner_lookup_field) if owner_lookup_param.present?
       url_for(keys)
     end
@@ -74,6 +71,14 @@ module Rapido
 
     def show_path(resource)
       resource_path(:show, resource)
+    end
+
+    def new_path
+      resource_path(:new)
+    end
+
+    def index_path
+      resource_path(:index)
     end
 
     def after_create_path(resource)
