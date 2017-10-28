@@ -1,7 +1,7 @@
 Feature: Hydrospanners
 
   Background:
-    Given I am Andy Developer
+    Given I am Developer Alpha
     And I send and accept JSON
 
   Scenario: System blocks access to api without proper api_key
@@ -35,7 +35,7 @@ Feature: Hydrospanners
     And the response status should be "201"
 
   Scenario: Get all Hydrospanners
-    Given Betsy Developer exists
+    Given Developer Omega exists
     When I send a GET request to "/api/toolboxes/okaybox/hydrospanners?api_key=ABCDE" with the following:
     Then the response status should be "200"
     And the JSON response should be:

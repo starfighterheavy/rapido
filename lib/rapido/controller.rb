@@ -33,17 +33,30 @@ module Rapido
       def resource_permitted_params(ary)
         @resource_permitted_params = ary.map(&:to_sym)
       end
+
+      def free_from_authority!
+        @free_from_authority = true
+      end
+
+      def permit_all_params!
+        @permit_all_params = true
+      end
     end
 
     private
 
       def resource_permitted_params
         @resource_permitted_params ||=
-          self.class.instance_variable_get(:@resource_permitted_params)
+          setting(:resource_permitted_params)
       end
 
       def resource_params
-        params.require(resource_class_name).permit(resource_permitted_params)
+        base = params.require(resource_class_name)
+        if setting(:permit_all_params)
+          base.permit!
+        else
+          base.permit(resource_permitted_params)
+        end
       end
 
       def build_resource
@@ -59,7 +72,7 @@ module Rapido
 
       def owner_class
         @owner_class ||= begin
-          name = self.class.instance_variable_get(:@owner_class)
+          name = setting(:owner_class)
           name.to_s.camelize.constantize
         rescue NameError
           raise BadOwnerClassName, name
@@ -72,21 +85,25 @@ module Rapido
 
       def owner_lookup_param
         @owner_lookup_param ||=
-          self.class.instance_variable_get(:@owner_lookup_param).to_s
+          setting(:owner_lookup_param).to_s
       end
 
       def owner_lookup_field
         @owner_lookup_field ||=
-          (self.class.instance_variable_get(:@owner_lookup_field) || owner_lookup_param).to_s
+          (setting(:owner_lookup_field) || owner_lookup_param).to_s
       end
 
       def owner
         @owner ||= begin
-           authority.send(owner_class_name.pluralize)
-                    .find_by(owner_lookup_field => params[owner_lookup_param])
-         rescue ActiveRecord::RecordNotFound
-           raise RecordNotFound
-         end
+          if setting(:free_from_authority)
+            base = owner_class
+          else
+            base = authority.send(owner_class_name.pluralize)
+          end
+          base.find_by(owner_lookup_field => params[owner_lookup_param])
+        rescue ActiveRecord::RecordNotFound
+          raise RecordNotFound
+        end
       end
 
       def resource
@@ -101,12 +118,12 @@ module Rapido
 
       def resource_lookup_param
         @resource_lookup_param ||=
-          self.class.instance_variable_get(:@resource_lookup_param) || :id
+          setting(:resource_lookup_param) || :id
       end
 
       def resource_class
         @resource_class ||=
-          (self.class.instance_variable_get(:@resource_class) ||
+          (setting(:resource_class) ||
           resource_class_from_controller).to_s.camelize.constantize
       end
 
@@ -116,6 +133,10 @@ module Rapido
 
       def resource_class_from_controller
         self.class.name.split('::')[-1].remove('Controller').singularize.underscore
+      end
+
+      def setting(var)
+        self.class.instance_variable_get("@#{var}")
       end
   end
 end

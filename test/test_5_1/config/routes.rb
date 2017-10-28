@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     resources :toolboxes, param: :name do
       resources :hydrospanners, param: :name
     end
+
+    resources :comlinks, only: [], param: :token do
+      resources :messages, only: [:create]
+    end
   end
 
   resources :toolboxes, param: :name do
