@@ -100,7 +100,7 @@ module Rapido
           else
             base = authority.send(owner_class_name.pluralize)
           end
-          base.find_by(owner_lookup_field => params[owner_lookup_param])
+          base.find_by!(owner_lookup_field => params[owner_lookup_param])
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
         end
