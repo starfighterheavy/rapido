@@ -10,15 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025164655) do
+ActiveRecord::Schema.define(version: 20171028161610) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "api_key", null: false
   end
 
+  create_table "comlinks", force: :cascade do |t|
+    t.string "token"
+  end
+
   create_table "hydrospanners", force: :cascade do |t|
     t.string "name"
     t.integer "toolbox_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "token"
+    t.integer "comlink_id"
+    t.string "content"
   end
 
   create_table "toolboxes", force: :cascade do |t|
@@ -43,4 +53,5 @@ ActiveRecord::Schema.define(version: 20171025164655) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
 end
