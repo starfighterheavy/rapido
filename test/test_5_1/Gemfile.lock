@@ -14,6 +14,12 @@ GIT
       cucumber
       cucumber_priority
 
+PATH
+  remote: ../..
+  specs:
+    rails-rapido (0.3.1)
+      kaminari (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -212,7 +218,7 @@ GEM
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.3)
-    tzinfo (1.2.3)
+    tzinfo (1.2.4)
       thread_safe (~> 0.1)
     warden (1.2.7)
       rack (>= 1.0)
@@ -238,6 +244,7 @@ DEPENDENCIES
   pry-byebug
   puma (~> 3.7)
   rails (~> 5.1.4)
+  rails-rapido!
   rspec-rails
   simple_form
   slim
