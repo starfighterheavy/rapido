@@ -32,7 +32,7 @@ module Rapido
 
       def owner_lookup_param(*args)
         return @owner_lookup_param = str.to_sym if args.count == 1
-        @owner_lookup_param = args.join("_").to_sym
+        @owner_lookup_param = args.join('_').to_sym
       end
 
       def owner_lookup_field(str)
