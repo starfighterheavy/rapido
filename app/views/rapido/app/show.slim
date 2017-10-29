@@ -1,7 +1,10 @@
-h2= @resource.to_param
+h2= @resource.name
 
-= link_to "Edit", url_for([:edit, @owner, @resource])
-
-= link_to "Delete", url_for([@owner, @resource]), method: :delete
-
+= link_to "Edit", url_for([:edit, @owner, @resource].compact)
+= link_to "Delete", url_for([@owner, @resource].compact), method: :delete
 = link_to "Back", controller: params[:controller], action: "index"
+
+dl
+  - @resource.to_h.each do |key, value|
+    dt= key
+    dd= value

@@ -5,6 +5,9 @@ module Rapido
     included do
       before_action do
         append_view_path (Rapido::Engine.root + 'app/views/rapido')
+        new_path
+        index_path
+        resource_class
       end
     end
 
