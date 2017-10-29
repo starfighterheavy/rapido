@@ -3,8 +3,8 @@ class Api::ToolboxesController < Api::ApplicationController
   include Rapido::ApiController
 
   owner_class :account
-  resource_lookup_param :name
-  resource_permitted_params [:name]
+  lookup_param :name
+  attr_permitted :name
 
   private
 
