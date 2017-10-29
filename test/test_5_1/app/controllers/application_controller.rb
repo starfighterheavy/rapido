@@ -6,4 +6,12 @@ class ApplicationController < ActionController::Base
   include Rapido::Controller
   include Rapido::AppController
   include Rapido::AppRecordNotFound
+
+  authority :current_user_account
+
+  private
+
+  def current_user_account
+    current_user.account
+  end
 end
