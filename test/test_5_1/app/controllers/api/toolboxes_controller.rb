@@ -2,13 +2,7 @@ class Api::ToolboxesController < Api::ApplicationController
   include Rapido::Controller
   include Rapido::ApiController
 
-  owner_class :account
+  belongs_to :account, getter: :authority
   lookup_param :name
   attr_permitted :name
-
-  private
-
-  def owner
-    @authority
-  end
 end

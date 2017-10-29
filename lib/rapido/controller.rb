@@ -1,6 +1,5 @@
 require 'active_support'
 require 'active_support/core_ext'
-require 'active_support/rescuable'
 require 'rapido/errors'
 
 module Rapido
@@ -10,12 +9,30 @@ module Rapido
     include Rapido::Errors
 
     class_methods do
-      def owner_class(str)
-        @owner_class = str.to_sym
+      def authority(sym)
+        @authority_getter = sym.to_sym
       end
 
-      def owner_lookup_param(str)
-        @owner_lookup_param = str.to_sym
+      def belongs_to(sym, opts = {})
+        @owner_class = sym.to_sym
+        return @owner_getter = opts[:getter] if opts[:getter]
+        return owner_lookup_defaults unless opts[:foreign_key]
+        @owner_lookup_field = opts[:foreign_key]
+        if opts[:foreign_key_param]
+          owner_lookup_param(opts[:foreign_key_param])
+        else
+          owner_lookup_param(@owner_class, opts[:foreign_key])
+        end
+      end
+
+      def owner_lookup_defaults
+        owner_lookup_param(@owner_class, :id)
+        owner_lookup_field(:id)
+      end
+
+      def owner_lookup_param(*args)
+        return @owner_lookup_param = str.to_sym if args.count == 1
+        @owner_lookup_param = args.join("_").to_sym
       end
 
       def owner_lookup_field(str)
@@ -44,6 +61,16 @@ module Rapido
     end
 
     private
+
+      def authority
+        @authority ||= begin
+          if setting(:free_from_authority)
+            nil
+          else
+            send(setting(:authority_getter))
+          end
+        end
+      end
 
       def resource_permitted_params
         @resource_permitted_params ||=
@@ -95,12 +122,16 @@ module Rapido
 
       def owner
         @owner ||= begin
-          if setting(:free_from_authority)
-            base = owner_class
+          if setting(:owner_getter)
+            send(setting(:owner_getter))
           else
-            base = authority.send(owner_class_name.pluralize)
+            if setting(:free_from_authority)
+              base = owner_class
+            else
+              base = authority.send(owner_class_name.pluralize)
+            end
+            base.find_by!(owner_lookup_field => params[owner_lookup_param])
           end
-          base.find_by!(owner_lookup_field => params[owner_lookup_param])
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
         end
