@@ -26,11 +26,11 @@ module Rapido
         @resource_class = str.to_sym
       end
 
-      def resource_lookup_param(str)
+      def lookup_param(str)
         @resource_lookup_param = str.to_sym
       end
 
-      def resource_permitted_params(ary)
+      def attr_permitted(*ary)
         @resource_permitted_params = ary.map(&:to_sym)
       end
 
