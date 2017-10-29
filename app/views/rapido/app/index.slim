@@ -1,5 +1,5 @@
-h2= @owner.name + " Hydrospanners"
-= link_to "New Hydrospanner", new_toolbox_hydrospanner_path(@owner)
+h2= [@owner.name, @resource_class.name.capitalize.pluralize].compact.join(" ")
+= link_to "New #{@resource_class.name.capitalize}", @new_path
 table
   thead
     tr
@@ -9,6 +9,6 @@ table
     tr
       - resource.keys.each_with_index do |key, index|
         - if index == 0
-          td= link_to resource.name, toolbox_hydrospanner_path(@owner, resource)
+          td= link_to resource.name, url_for([@owner, resource].compact)
         - else
           td= resource[key]

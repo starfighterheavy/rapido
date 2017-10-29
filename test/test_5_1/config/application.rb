@@ -6,10 +6,6 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-rapido_path = File.expand_path("../../../../lib", __FILE__)
-$LOAD_PATH.unshift File.expand_path(rapido_path, __FILE__)
-require 'rapido'
-
 module Test51
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

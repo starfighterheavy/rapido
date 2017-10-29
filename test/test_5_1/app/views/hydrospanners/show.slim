@@ -1,7 +1,0 @@
-h2= @resource.to_param
-
-= link_to "Edit", url_for([:edit, @owner, @resource])
-
-= link_to "Delete", url_for([@owner, @resource]), method: :delete
-
-= link_to "Back", controller: params[:controller], action: "index"

@@ -1,10 +1,5 @@
 class HydrospannersController < ApplicationController
-  include Rapido::Controller
-  include Rapido::AppController
-
-  before_action do
-    resource_permitted_params
-  end
+  include Rapido::AppViews
 
   owner_class :toolbox
   owner_lookup_param :toolbox_name

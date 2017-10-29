@@ -5,12 +5,11 @@ require 'rapido/errors'
 module Rapido
   module AppController
     extend ActiveSupport::Concern
-
     include Rapido::Errors
 
     included do
-      rescue_from RecordNotFound do |e|
-        render file: 'public/404', status: :not_found, layout: false
+      before_action do
+        resource_permitted_params
       end
     end
 
@@ -66,19 +65,19 @@ module Rapido
     end
 
     def edit_path(resource)
-      resource_path(:edit, resource)
+      @edit_path ||= resource_path(:edit, resource)
     end
 
     def show_path(resource)
-      resource_path(:show, resource)
+      @show_path ||= resource_path(:show, resource)
     end
 
     def new_path
-      resource_path(:new)
+      @new_path ||= resource_path(:new)
     end
 
     def index_path
-      resource_path(:index)
+      @index_path ||= resource_path(:index)
     end
 
     def after_create_path(resource)

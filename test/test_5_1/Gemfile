@@ -13,6 +13,7 @@ gem 'devise'
 gem 'slim'
 gem 'turbolinks'
 gem 'simple_form'
+gem 'rails-rapido', path: '../../../rapido'
 
 group :development, :test do
   gem 'pry-byebug'

@@ -1,11 +1,4 @@
 class ToolboxesController < ApplicationController
-  include Rapido::Controller
-  include Rapido::AppController
-
-  before_action do
-    resource_permitted_params
-  end
-
   before_action :authenticate_user!
 
   owner_class :account
