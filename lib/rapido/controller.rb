@@ -67,7 +67,8 @@ module Rapido
           if setting(:free_from_authority)
             nil
           else
-            send(setting(:authority_getter))
+            send(setting(:authority_getter) ||
+              self.class.superclass.instance_variable_get(:@authority_getter))
           end
         end
       end
