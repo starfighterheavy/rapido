@@ -36,7 +36,9 @@ module Rapido
     end
 
     def destroy
-      resource.destroy
+      unless resource.destroy
+        flash[:error] = resource.errors.full_messages.join('. ')
+      end
       redirect_to after_delete_path(resource)
     end
 
