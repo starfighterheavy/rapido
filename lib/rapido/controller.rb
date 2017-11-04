@@ -13,6 +13,10 @@ module Rapido
         @authority_getter = sym.to_sym
       end
 
+      def belongs_to_nothing!
+        @belongs_to_nothing = true
+      end
+
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         return @owner_getter = opts[:getter] if opts[:getter]
@@ -23,6 +27,11 @@ module Rapido
         else
           owner_lookup_param(@owner_class, opts[:foreign_key])
         end
+      end
+
+      def has_many(sym)
+        @owned_resources ||= []
+        @owned_resources << sym
       end
 
       def owner_lookup_defaults
@@ -88,13 +97,13 @@ module Rapido
       end
 
       def build_resource
-        owner.send(resource_class_name.pluralize).new(resource_params)
+        resource_base.send(resource_class_name.pluralize).new(resource_params)
       end
 
       def resource_collection
         @resource_collection ||= begin
-          raise RecordNotFound unless owner
-          owner.send(resource_class_name.pluralize).page(params[:page])
+          raise RecordNotFound unless setting(:belongs_to_nothing) || owner
+          resource_base.send(resource_class_name.pluralize).page(params[:page])
         end
       end
 
@@ -123,7 +132,9 @@ module Rapido
 
       def owner
         @owner ||= begin
-          if setting(:owner_getter)
+          if setting(:belongs_to_nothing)
+            nil
+          elsif setting(:owner_getter)
             send(setting(:owner_getter))
           else
             if setting(:free_from_authority)
@@ -138,9 +149,13 @@ module Rapido
         end
       end
 
+      def resource_base
+        setting(:belongs_to_nothing) ? authority : owner
+      end
+
       def resource
         @resource ||= begin
-          owner
+           resource_base
             .send(resource_class_name.pluralize)
             .find_by!(resource_lookup_param => params[resource_lookup_param])
         rescue ActiveRecord::RecordNotFound
@@ -165,6 +180,10 @@ module Rapido
 
       def resource_class_from_controller
         self.class.name.split('::')[-1].remove('Controller').singularize.underscore
+      end
+
+      def owned_resources
+        @owned_resources ||= setting(:owned_resources) || []
       end
 
       def setting(var)

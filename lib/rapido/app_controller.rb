@@ -11,6 +11,7 @@ module Rapido
       before_action do
         resource_permitted_params
       end
+      helper_method :owned_resources
     end
 
     def index
@@ -22,7 +23,7 @@ module Rapido
     end
 
     def new
-      @resource = owner.send(resource_class_name.pluralize).new
+      @resource = resource_base.send(resource_class_name.pluralize).new
     end
 
     def create
