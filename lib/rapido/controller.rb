@@ -155,11 +155,11 @@ module Rapido
 
       def resource
         @resource ||= begin
-           resource_base
-            .send(resource_class_name.pluralize)
-            .find_by!(resource_lookup_param => params[resource_lookup_param])
-        rescue ActiveRecord::RecordNotFound
-          raise RecordNotFound
+          resource_base
+           .send(resource_class_name.pluralize)
+           .find_by!(resource_lookup_param => params[resource_lookup_param])
+       rescue ActiveRecord::RecordNotFound
+         raise RecordNotFound
         end
       end
 
