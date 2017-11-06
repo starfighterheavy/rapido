@@ -1,4 +1,4 @@
-h2= [@owner.name, @resource_class.name.capitalize.pluralize].compact.join(" ")
+h2= [@owner&.name, @resource_class.name.capitalize.pluralize].compact.join(" ")
 = link_to "New #{@resource_class.name.capitalize}", @new_path
 table
   thead
@@ -11,4 +11,5 @@ table
         - if index == 0
           td= link_to resource.name, url_for([@owner, resource].compact)
         - else
+          - next if resource.name == resource[key]
           td= resource[key]

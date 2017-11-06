@@ -8,3 +8,6 @@ dl
   - @resource.to_h.each do |key, value|
     dt= key
     dd= value
+
+- owned_resources.each do |owned_resource|
+  = link_to "View #{owned_resource.to_s.pluralize.capitalize}", url_for([nil, @owner, @resource, owned_resource].compact)
