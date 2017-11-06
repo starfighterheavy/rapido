@@ -11,4 +11,5 @@ table
         - if index == 0
           td= link_to resource.name, url_for([@owner, resource].compact)
         - else
+          - next if resource.name == resource[key]
           td= resource[key]
