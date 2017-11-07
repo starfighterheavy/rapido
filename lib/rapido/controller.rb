@@ -8,6 +8,21 @@ module Rapido
 
     include Rapido::Errors
 
+    included do
+      define_method resource_class_name do
+        resource
+      end
+
+      define_method resource_class_name.pluralize do
+        resource_collection
+      end
+
+      if defined? helper_method
+        helper_method resource_class_name
+        helper_method resource_class_name.pluralize
+      end
+    end
+
     class_methods do
       def authority(sym)
         @authority_getter = sym.to_sym
@@ -19,6 +34,12 @@ module Rapido
 
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
+        define_method @owner_class do
+          owner
+        end
+        if defined? helper_method
+          helper_method @owner_class
+        end
         return @owner_getter = opts[:getter] if opts[:getter]
         return owner_lookup_defaults unless opts[:foreign_key]
         @owner_lookup_field = opts[:foreign_key]
@@ -57,7 +78,7 @@ module Rapido
       end
 
       def attr_permitted(*ary)
-        @resource_permitted_params = ary.map(&:to_sym)
+        @resource_permitted_params = ary
       end
 
       def free_from_authority!
@@ -66,6 +87,10 @@ module Rapido
 
       def permit_all_params!
         @permit_all_params = true
+      end
+
+      def resource_class_name
+        self.name.split('::')[-1].remove('Controller').singularize.underscore
       end
     end
 
