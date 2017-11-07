@@ -13,8 +13,13 @@ module Rapido
         resource
       end
 
+      define_method resource_class_name.pluralize do
+        resource_collection
+      end
+
       if defined? helper_method
         helper_method resource_class_name
+        helper_method resource_class_name.pluralize
       end
     end
 
