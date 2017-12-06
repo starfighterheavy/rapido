@@ -122,7 +122,7 @@ module Rapido
       end
 
       def build_resource
-        resource_base.send(resource_class_name.pluralize).new(resource_params)
+        resource_base.send(resource_class_name.pluralize).build(resource_params)
       end
 
       def resource_collection
