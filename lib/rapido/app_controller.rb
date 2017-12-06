@@ -23,7 +23,7 @@ module Rapido
     end
 
     def new
-      @resource = resource_base.send(resource_class_name.pluralize).new
+      @resource = resource_base.send(resource_class_name.pluralize).build
     end
 
     def create
