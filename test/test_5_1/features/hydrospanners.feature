@@ -13,12 +13,13 @@ Feature: Hydrospanners
     When I follow "View Hydrospanners"
     And I should see "mediocrehydrospanner"
 
-  Scenario: User can create a new hydrospanner for a toolbox
+  Scenario: User can create a new hydrospanner for a toolbox and apply an after success filter
     When I follow "View Hydrospanners"
     And I follow "New Hydrospanner"
     And I fill in "Name" with "BetterHydrospanner"
     And I press "Save"
     Then I should see "BetterHydrospanner"
+    And I should see "Well done!"
 
   Scenario: User can view hydrospanner
     When I follow "View Hydrospanners"

@@ -29,6 +29,7 @@ module Rapido
     def create
       new_resource = build_resource
       if new_resource.save
+        after_create_success(new_resource)
         redirect_to after_create_path(new_resource)
       else
         flash[:error] = new_resource.errors.full_messages.join('. ')
@@ -59,6 +60,9 @@ module Rapido
     end
 
     private
+
+    def after_create_success(*)
+    end
 
     def resource_path(action, resource = nil)
       keys = { controller: params[:controller], action: action }
