@@ -18,8 +18,14 @@ Feature: Hydrospanners
     And I follow "New Hydrospanner"
     And I fill in "Name" with "BetterHydrospanner"
     And I press "Save"
-    Then I should see "BetterHydrospanner"
-    And I should see "Well done!"
+    Then I should see "Rendered text: BetterHydrospanner"
+
+  Scenario: System prevents invalid create
+    When I follow "View Hydrospanners"
+    When I follow "New Hydrospanner"
+    And I fill in "Name" with ""
+    And I press "Save"
+    Then I should see "Rendered text: Name can't be blank"
 
   Scenario: User can view hydrospanner
     When I follow "View Hydrospanners"
@@ -42,7 +48,7 @@ Feature: Hydrospanners
     And I press "Save"
     Then I should see "Name can't be blank"
 
-  Scenario: User cand delete a hydrospanner
+  Scenario: User can delete a hydrospanner
     When I follow "View Hydrospanners"
     And I follow "mediocrehydrospanner"
     When I click on "Delete"
