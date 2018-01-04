@@ -22,8 +22,8 @@ group :development, :test do
   gem 'cucumber-rails', require: false
   gem 'cucumber-api-steps', github: 'jayzes/cucumber-api-steps'
   gem 'cucumber-persona'
+  gem 'cucumber-sammies'
   gem 'cucumber_priority'
   gem 'database_cleaner'
-  gem 'spreewald', github: 'makandra/spreewald'
   gem 'rspec-rails'
 end
