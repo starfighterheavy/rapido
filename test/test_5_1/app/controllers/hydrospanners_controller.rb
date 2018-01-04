@@ -7,7 +7,11 @@ class HydrospannersController < ApplicationController
 
   private
 
-  def after_create_success(*)
-    flash[:success] = flash[:success].to_s + "Well done!"
+  def after_create_success(hydrospanner)
+    render plain: "Rendered text: " + hydrospanner.name
+  end
+
+  def after_create_failure(*)
+    render plain: "Rendered text: " + flash[:error]
   end
 end
