@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171028161610) do
+ActiveRecord::Schema.define(version: 20180213213155) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "api_key", null: false
@@ -29,6 +29,11 @@ ActiveRecord::Schema.define(version: 20171028161610) do
     t.string "token"
     t.integer "comlink_id"
     t.string "content"
+  end
+
+  create_table "protocol_droids", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
   end
 
   create_table "toolboxes", force: :cascade do |t|

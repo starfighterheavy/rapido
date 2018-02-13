@@ -23,11 +23,11 @@ module Rapido
     end
 
     def new
-      @resource = resource_base.send(resource_class_name.pluralize).build
+      @resource = build_resource
     end
 
     def create
-      new_resource = build_resource
+      new_resource = build_resource(resource_params)
       if new_resource.save
         after_create_success(new_resource)
         redirect_to after_create_path(new_resource) unless performed?
