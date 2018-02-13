@@ -5,7 +5,7 @@ h2= @resource.name
 = link_to "Back", controller: params[:controller], action: "index"
 
 dl
-  - @resource.to_h.each do |key, value|
+  - @resource_permitted_params.each do |key, value|
     dt= key
     dd= value
 

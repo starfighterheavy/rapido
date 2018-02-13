@@ -40,6 +40,7 @@ module Rapido
         if defined? helper_method
           helper_method @owner_class
         end
+        @has_one = opts[:has_one]
         return @owner_getter = opts[:getter] if opts[:getter]
         return owner_lookup_defaults unless opts[:foreign_key]
         @owner_lookup_field = opts[:foreign_key]
@@ -121,14 +122,22 @@ module Rapido
         end
       end
 
-      def build_resource
-        resource_base.send(resource_class_name.pluralize).build(resource_params)
+      def build_resource(params = {})
+        if setting(:has_one)
+          resource_base.send("build_" + resource_class_name, params)
+        else
+          resource_base.send(resource_class_name.pluralize).build(params)
+        end
       end
 
       def resource_collection
         @resource_collection ||= begin
           raise RecordNotFound unless setting(:belongs_to_nothing) || owner
-          resource_base.send(resource_class_name.pluralize).page(params[:page])
+          if setting(:has_one)
+            resource_base.send(resource_class_name)
+          else
+            resource_base.send(resource_class_name.pluralize).page(params[:page])
+          end
         end
       end
 
@@ -180,9 +189,13 @@ module Rapido
 
       def resource
         @resource ||= begin
-          resource_base
-           .send(resource_class_name.pluralize)
-           .find_by!(resource_lookup_param => params[resource_lookup_param])
+          if setting(:has_one)
+            resource_base.send(resource_class_name)
+          else
+            resource_base
+              .send(resource_class_name.pluralize)
+              .find_by!(resource_lookup_param => params[resource_lookup_param])
+          end
        rescue ActiveRecord::RecordNotFound
          raise RecordNotFound
         end

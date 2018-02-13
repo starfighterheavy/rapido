@@ -24,7 +24,7 @@ module Rapido
     end
 
     def create
-      new_resource = build_resource
+      new_resource = build_resource(resource_params)
       if new_resource.save
         render json: new_resource.to_h, status: :created
       else
