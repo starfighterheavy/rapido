@@ -9,7 +9,7 @@ GIT
 PATH
   remote: ../..
   specs:
-    rails-rapido (0.3.6)
+    rails-rapido (0.3.8)
       kaminari (~> 1.1)
 
 GEM

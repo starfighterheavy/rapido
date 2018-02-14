@@ -15,4 +15,12 @@ class User::ProtocolDroidsController < ApplicationController
   def after_create_path(protocol_droid)
     user_protocol_droid_path(protocol_droid)
   end
+
+  def after_update_success(protocol_droid)
+    render plain: "Success! You've updated #{protocol_droid.name}"
+  end
+
+  def after_update_failure(protocol_droid)
+    render plain: "Blast it! You've failed to update #{protocol_droid.name}"
+  end
 end
