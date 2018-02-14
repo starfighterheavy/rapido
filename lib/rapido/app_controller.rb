@@ -52,11 +52,13 @@ module Rapido
     def update
       resource.assign_attributes(resource_params)
       if resource.save
-        redirect_to after_update_path(resource)
+        after_update_success(resource)
+        redirect_to after_update_path(resource) unless performed?
       else
         flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
-        redirect_to edit_path(resource)
+        after_update_failure(resource)
+        redirect_to edit_path(resource) unless performed?
       end
     end
 
@@ -66,6 +68,12 @@ module Rapido
     end
 
     def after_create_failure(*)
+    end
+
+    def after_update_success(*)
+    end
+
+    def after_update_failure(*)
     end
 
     def resource_path(action, resource = nil)
