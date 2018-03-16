@@ -23,4 +23,8 @@ class User::ProtocolDroidsController < ApplicationController
   def after_update_failure(protocol_droid)
     render plain: "Blast it! You've failed to update #{protocol_droid.name}"
   end
+
+  def after_destroy_success(protocol_droid)
+    render plain: "Success! You've destroyed #{protocol_droid.name}"
+  end
 end

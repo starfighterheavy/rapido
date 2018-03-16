@@ -9,4 +9,8 @@ class User < ApplicationRecord
   before_create do
     self.account ||= Account.create!
   end
+
+  def name
+    email
+  end
 end

@@ -42,7 +42,8 @@ module Rapido
       unless resource.destroy
         flash[:error] = resource.errors.full_messages.join('. ')
       end
-      redirect_to after_delete_path(resource)
+      after_destroy_success(resource)
+      redirect_to after_delete_path(resource) unless performed?
     end
 
     def edit
@@ -74,6 +75,9 @@ module Rapido
     end
 
     def after_update_failure(*)
+    end
+
+    def after_destroy_success(*)
     end
 
     def resource_path(action, resource = nil)

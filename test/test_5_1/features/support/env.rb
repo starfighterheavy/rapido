@@ -5,6 +5,7 @@ require 'cucumber/sammies/step_definitions/content_steps'
 require 'cucumber/sammies/step_definitions/navigation_steps'
 require 'cucumber/sammies/step_definitions/form_steps'
 require 'cucumber/sammies/step_definitions/troubleshooting_steps'
+require 'cucumber/persona/step_definitions/persona_steps'
 
 ActionController::Base.allow_rescue = false
 
