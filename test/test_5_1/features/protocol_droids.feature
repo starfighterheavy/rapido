@@ -20,21 +20,23 @@ Feature: Protocol droids - demonstrating has_one relationship support
     Then I should see "Name can't be blank"
 
   Scenario: after_update_success filter
-    When I visit "/user/protocol_droids/new"
-    And I fill in "Name" with "GreatDroid"
-    And I press "Save"
-    And I visit "/user/protocol_droids/GreatDroid"
+    Given "Marvin" exists
+    When I visit "/user/protocol_droids/Marvin"
     And I click on "Edit"
     And I fill in "Name" with "SlightlyBetterDroid"
     And I press "Save"
     Then the page body should include "Success! You've updated SlightlyBetterDroid"
 
   Scenario: after_update_failure filter
-    When I visit "/user/protocol_droids/new"
-    And I fill in "Name" with "GreatDroid"
-    And I press "Save"
-    And I visit "/user/protocol_droids/GreatDroid"
+    Given "Marvin" exists
+    When I visit "/user/protocol_droids/Marvin"
     And I click on "Edit"
     And I fill in "Name" with ""
     And I press "Save"
-    Then the page body should include "Blast it! You've failed to update GreatDroid"
+    Then the page body should include "Blast it! You've failed to update Marvin"
+
+  Scenario: after_destroy_success filter
+    Given "Marvin" exists
+    When I visit "/user/protocol_droids/Marvin"
+    And I click "Delete"
+    Then the page body should include "Success! You've destroyed Marvin"
