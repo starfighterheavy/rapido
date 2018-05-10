@@ -32,6 +32,10 @@ module Rapido
         @belongs_to_nothing = true
       end
 
+      def permit_no_params!
+        @permit_no_params = true
+      end
+
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         define_method @owner_class do
@@ -41,6 +45,7 @@ module Rapido
           helper_method @owner_class
         end
         @has_one = opts[:has_one]
+        @builder = opts[:builder]
         return @owner_getter = opts[:getter] if opts[:getter]
         return owner_lookup_defaults unless opts[:foreign_key]
         @owner_lookup_field = opts[:foreign_key]
@@ -114,6 +119,7 @@ module Rapido
       end
 
       def resource_params
+        return {} if setting(:permit_no_params)
         base = params.require(resource_class_name)
         if setting(:permit_all_params)
           base.permit!
@@ -126,6 +132,7 @@ module Rapido
         if setting(:has_one)
           resource_base.send("build_" + resource_class_name, params)
         else
+          return send(setting(:builder)) if setting(:builder)
           resource_base.send(resource_class_name.pluralize).build(params)
         end
       end
