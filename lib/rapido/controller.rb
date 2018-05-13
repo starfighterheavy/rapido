@@ -46,6 +46,7 @@ module Rapido
         end
         @has_one = opts[:has_one]
         @builder = opts[:builder]
+        @finder = opts[:finder]
         return @owner_getter = opts[:getter] if opts[:getter]
         return owner_lookup_defaults unless opts[:foreign_key]
         @owner_lookup_field = opts[:foreign_key]
@@ -132,7 +133,7 @@ module Rapido
         if setting(:has_one)
           resource_base.send("build_" + resource_class_name, params)
         else
-          return send(setting(:builder)) if setting(:builder)
+          return send(setting(:builder), params) if setting(:builder)
           resource_base.send(resource_class_name.pluralize).build(params)
         end
       end
@@ -196,7 +197,9 @@ module Rapido
 
       def resource
         @resource ||= begin
-          if setting(:has_one)
+          if setting(:finder)
+            send(setting(:finder))
+          elsif setting(:has_one)
             resource_base.send(resource_class_name)
           else
             resource_base

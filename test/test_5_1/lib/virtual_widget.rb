@@ -1,11 +1,18 @@
 class VirtualWidget
-  def initialize(toolbox)
+  attr_reader :toolbox, :params
 
+  def initialize(toolbox, params = nil)
+    @toolbox = toolbox
+    @params = params
+  end
+
+  def assign_attributes(params)
+    @params = params
   end
 
   def to_h
     {
-      "status": "Well done!"
+      "name": params[:name]
     }
   end
 
