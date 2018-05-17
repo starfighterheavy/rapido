@@ -30,11 +30,13 @@ module Rapido
       new_resource = build_resource(resource_params)
       if new_resource.save
         after_create_success(new_resource)
-        redirect_to after_create_path(new_resource) unless performed?
+        return if performed?
+        redirect_to after_create_path(new_resource)
       else
         flash[:error] = new_resource.errors.full_messages.join('. ')
         after_create_failure(new_resource)
-        redirect_to new_path unless performed?
+        return if performed?
+        redirect_to new_path
       end
     end
 
@@ -43,7 +45,8 @@ module Rapido
         flash[:error] = resource.errors.full_messages.join('. ')
       end
       after_destroy_success(resource)
-      redirect_to after_delete_path(resource) unless performed?
+      return if performed?
+      redirect_to after_delete_path(resource)
     end
 
     def edit
@@ -54,12 +57,14 @@ module Rapido
       resource.assign_attributes(resource_params)
       if resource.save
         after_update_success(resource)
-        redirect_to after_update_path(resource) unless performed?
+        return if performed?
+        redirect_to after_update_path(resource)
       else
         flash[:error] = resource.errors.full_messages.join('. ')
         resource.reload
         after_update_failure(resource)
-        redirect_to edit_path(resource) unless performed?
+        return if performed?
+        redirect_to edit_path(resource)
       end
     end
 
