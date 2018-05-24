@@ -52,5 +52,5 @@ Feature: Hydrospanners
     When I follow "View Hydrospanners"
     And I follow "mediocrehydrospanner"
     When I click on "Delete"
-    Then I should see "Okay Toolbox"
+    Then I should see "New Hydrospanner"
     And I should not see "mediorehydrospanner"

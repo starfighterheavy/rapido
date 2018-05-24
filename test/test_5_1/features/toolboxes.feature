@@ -44,5 +44,5 @@ Feature: Toolboxes
   Scenario: User cand delete a toolbox
     When I follow "Okay Toolbox"
     When I click on "Delete"
-    Then I should see "Toolboxes"
+    Then I should see "New Toolbox"
     And I should not see "Okay Toolbox"

@@ -32,10 +32,6 @@ module Rapido
         @belongs_to_nothing = true
       end
 
-      def permit_no_params!
-        @permit_no_params = true
-      end
-
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         define_method @owner_class do
@@ -57,11 +53,6 @@ module Rapido
         end
       end
 
-      def has_many(sym)
-        @owned_resources ||= []
-        @owned_resources << sym
-      end
-
       def owner_lookup_defaults
         owner_lookup_param(@owner_class, :id)
         owner_lookup_field(:id)
@@ -76,8 +67,8 @@ module Rapido
         @owner_lookup_field = str.to_sym
       end
 
-      def resource_class(str)
-        @resource_class = str.to_sym
+      def permit_no_params!
+        @permit_no_params = true
       end
 
       def lookup_param(str)
@@ -96,8 +87,12 @@ module Rapido
         @permit_all_params = true
       end
 
-      def resource_class_name
+      def resource_class_from_controller
         self.name.split('::')[-1].remove('Controller').singularize.underscore
+      end
+
+      def resource_class_name
+        resource_class_from_controller
       end
     end
 
@@ -114,38 +109,12 @@ module Rapido
         end
       end
 
-      def resource_permitted_params
-        @resource_permitted_params ||=
-          setting(:resource_permitted_params)
-      end
-
-      def resource_params
-        return {} if setting(:permit_no_params)
-        base = params.require(resource_class_name)
-        if setting(:permit_all_params)
-          base.permit!
-        else
-          base.permit(resource_permitted_params)
-        end
-      end
-
       def build_resource(params = {})
         if setting(:has_one)
           resource_base.send("build_" + resource_class_name, params)
         else
           return send(setting(:builder), params) if setting(:builder)
           resource_base.send(resource_class_name.pluralize).build(params)
-        end
-      end
-
-      def resource_collection
-        @resource_collection ||= begin
-          raise RecordNotFound unless setting(:belongs_to_nothing) || owner
-          if setting(:has_one)
-            resource_base.send(resource_class_name)
-          else
-            resource_base.send(resource_class_name.pluralize).page(params[:page])
-          end
         end
       end
 
@@ -211,27 +180,43 @@ module Rapido
         end
       end
 
+      def resource_class
+        @resource_class ||= resource_class_name.to_s.camelize.constantize
+      end
+
+      def resource_class_name
+        self.class.resource_class_name
+      end
+
+      def resource_collection
+        @resource_collection ||= begin
+          raise RecordNotFound unless setting(:belongs_to_nothing) || owner
+          if setting(:has_one)
+            resource_base.send(resource_class_name)
+          else
+            resource_base.send(resource_class_name.pluralize).page(params[:page])
+          end
+        end
+      end
+
       def resource_lookup_param
         @resource_lookup_param ||=
           setting(:resource_lookup_param) || :id
       end
 
-      def resource_class
-        @resource_class ||=
-          (setting(:resource_class) ||
-          resource_class_from_controller).to_s.camelize.constantize
+      def resource_permitted_params
+        @resource_permitted_params ||=
+          setting(:resource_permitted_params)
       end
 
-      def resource_class_name(name = nil)
-        @resource_class_name ||= resource_class.name.underscore
-      end
-
-      def resource_class_from_controller
-        self.class.name.split('::')[-1].remove('Controller').singularize.underscore
-      end
-
-      def owned_resources
-        @owned_resources ||= setting(:owned_resources) || []
+      def resource_params
+        return {} if setting(:permit_no_params)
+        base = params.require(resource_class_name)
+        if setting(:permit_all_params)
+          base.permit!
+        else
+          base.permit(resource_permitted_params)
+        end
       end
 
       def setting(var)

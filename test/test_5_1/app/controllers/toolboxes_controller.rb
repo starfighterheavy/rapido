@@ -1,9 +1,13 @@
 class ToolboxesController < ApplicationController
-  include Rapido::AppViews
+  include Rapido::Controller
+  include Rapido::AppController
+  include Rapido::AppRecordNotFound
+
+  authority :current_user_account
+
   before_action :authenticate_user!
 
   belongs_to_nothing!
-  has_many :hydrospanners
 
   authority :current_user_account
   attr_permitted :name
