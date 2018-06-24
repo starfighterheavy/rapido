@@ -1,7 +1,6 @@
 # Rapido
 
 [![Code Climate](https://codeclimate.com/github/starfighterheavy/rapido/badges/gpa.svg)](https://codeclimate.com/github/starfighterheavy/rapido)
-[![Dependency Status](https://gemnasium.com/starfighterheavy/rapido.svg)](https://gemnasium.com/starfighterheavy/rapido)
 
 Rapido is a simple, highly opinionated library that can be included into your Rails controllers to enforce standardized behavior and security.
 
