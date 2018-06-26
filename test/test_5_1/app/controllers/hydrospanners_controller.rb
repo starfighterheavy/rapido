@@ -3,9 +3,7 @@ class HydrospannersController < ApplicationController
   include Rapido::AppController
   include Rapido::AppRecordNotFound
 
-  authority :current_user_account
-
-  belongs_to :toolbox, foreign_key: :name
+  belongs_to :toolbox, foreign_key: :name, owner: :current_user_account
   attr_permitted :name
   lookup_param :name
 

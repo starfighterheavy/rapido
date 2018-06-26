@@ -24,14 +24,6 @@ module Rapido
     end
 
     class_methods do
-      def authority(sym)
-        @authority_getter = sym.to_sym
-      end
-
-      def belongs_to_nothing!
-        @belongs_to_nothing = true
-      end
-
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         define_method @owner_class do
@@ -41,8 +33,7 @@ module Rapido
           helper_method @owner_class
         end
         @has_one = opts[:has_one]
-        @builder = opts[:builder]
-        @finder = opts[:finder]
+        @owners_owner = opts[:owner]
         return @owner_getter = opts[:getter] if opts[:getter]
         return owner_lookup_defaults unless opts[:foreign_key]
         @owner_lookup_field = opts[:foreign_key]
@@ -79,10 +70,6 @@ module Rapido
         @resource_permitted_params = ary
       end
 
-      def free_from_authority!
-        @free_from_authority = true
-      end
-
       def permit_all_params!
         @permit_all_params = true
       end
@@ -98,27 +85,18 @@ module Rapido
 
     private
 
-      def authority
-        @authority ||= begin
-          if setting(:free_from_authority)
-            nil
-          else
-            send(setting(:authority_getter) ||
-              self.class.superclass.instance_variable_get(:@authority_getter))
-          end
-        end
-      end
-
       def build_resource(params = {})
-        if setting(:has_one)
-          resource_base.send("build_" + resource_class_name, params)
-        else
-          return send(setting(:builder), params) if setting(:builder)
-          resource_base.send(resource_class_name.pluralize).build(params)
+        return owner.send("build_" + resource_class_name, params) if setting(:has_one)
+        return owner.send(resource_class_name.pluralize).build(params) if owner && owner.respond_to?(resource_class_name.pluralize)
+        begin
+          send(:build)
+        rescue NoMethodError
+          raise "Rapido::Controller must belong to something that responds to build or define a build method"
         end
       end
 
       def owner_class
+        return nil unless setting(:owner_class)
         @owner_class ||= begin
           name = setting(:owner_class)
           name.to_s.camelize.constantize
@@ -143,37 +121,37 @@ module Rapido
 
       def owner
         @owner ||= begin
-          if setting(:belongs_to_nothing)
-            nil
-          elsif setting(:owner_getter)
+          if setting(:owner_getter)
             send(setting(:owner_getter))
-          else
-            if setting(:free_from_authority)
-              base = owner_class
+          elsif setting(:owner_class)
+            if setting(:owners_owner)
+              base = send(setting(:owners_owner)).send(owner_class_name.pluralize)
             else
-              base = authority.send(owner_class_name.pluralize)
+              base = owner_class
             end
             base.find_by!(owner_lookup_field => params[owner_lookup_param])
+          else
+            nil
           end
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
         end
       end
 
-      def resource_base
-        setting(:belongs_to_nothing) ? authority : owner
-      end
-
       def resource
         @resource ||= begin
-          if setting(:finder)
-            send(setting(:finder))
-          elsif setting(:has_one)
-            resource_base.send(resource_class_name)
-          else
-            resource_base
+          if setting(:has_one)
+            owner.send(resource_class_name)
+          elsif owner && owner.respond_to?(resource_class_name.pluralize)
+            owner
               .send(resource_class_name.pluralize)
               .find_by!(resource_lookup_param => params[resource_lookup_param])
+          else
+            begin NoMethodError
+              send(:find)
+            rescue
+              raise "Rapido::Controller must belong to something that has many or has one of resource, or define a find method"
+            end
           end
        rescue ActiveRecord::RecordNotFound
          raise RecordNotFound
@@ -188,13 +166,13 @@ module Rapido
         self.class.resource_class_name
       end
 
+      # Todo: FIXME
       def resource_collection
         @resource_collection ||= begin
-          raise RecordNotFound unless setting(:belongs_to_nothing) || owner
           if setting(:has_one)
-            resource_base.send(resource_class_name)
+            owner.send(resource_class_name)
           else
-            resource_base.send(resource_class_name.pluralize).page(params[:page])
+            owner.send(resource_class_name.pluralize).page(params[:page])
           end
         end
       end

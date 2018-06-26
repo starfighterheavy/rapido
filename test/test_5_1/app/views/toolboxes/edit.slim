@@ -1,4 +1,4 @@
-= simple_form_for([@owner, @resource].compact) do |f|
+= simple_form_for(toolbox) do |f|
   - @resource_permitted_params.each do |param|
     = f.input param
   = f.submit "Save"
