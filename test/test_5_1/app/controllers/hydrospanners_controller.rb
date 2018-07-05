@@ -1,7 +1,9 @@
 class HydrospannersController < ApplicationController
-  include Rapido::AppViews
+  include Rapido::Controller
+  include Rapido::AppController
+  include Rapido::AppRecordNotFound
 
-  belongs_to :toolbox, foreign_key: :name
+  belongs_to :toolbox, foreign_key: :name, owner: :current_user_account
   attr_permitted :name
   lookup_param :name
 

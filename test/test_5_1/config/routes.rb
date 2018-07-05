@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   namespace :api do
     resources :toolboxes, param: :name do
       resources :hydrospanners, param: :name
+      resource :virtual_widget
+      resources :empty_widgets
     end
 
     resources :comlinks, only: [], param: :token do

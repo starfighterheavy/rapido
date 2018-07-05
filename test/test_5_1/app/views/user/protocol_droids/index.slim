@@ -1,0 +1,9 @@
+= link_to "New Protocol Droid", new_user_protocol_droid_path(protocol_droid)
+
+table
+  thead
+    tr
+      th Name
+  - protocol_droids.each do |droid|
+    tr
+      td= link_to droid.name, user_protocol_droid_path(droid)

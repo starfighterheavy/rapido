@@ -2,7 +2,6 @@ require 'rapido/version'
 require 'rapido/controller'
 require 'rapido/api_controller'
 require 'rapido/app_controller'
-require 'rapido/app_views'
 require 'rapido/app_record_not_found'
 require 'rapido/auth/api_key'
 

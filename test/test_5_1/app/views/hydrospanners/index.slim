@@ -1,0 +1,9 @@
+= link_to "New Hydrospanner", new_toolbox_hydrospanner_path(toolbox)
+
+table
+  thead
+    tr
+      th Name
+  - hydrospanners.each do |hydrospanner|
+    tr
+      td= link_to hydrospanner.name, toolbox_hydrospanner_path(toolbox, hydrospanner)

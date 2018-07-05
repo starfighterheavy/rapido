@@ -1,7 +1,6 @@
 class User::ProtocolDroidsController < ApplicationController
   include Rapido::Controller
   include Rapido::AppController
-  include Rapido::AppViews
 
   before_action :authenticate_user!
 
