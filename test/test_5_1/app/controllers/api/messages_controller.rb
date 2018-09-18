@@ -6,4 +6,6 @@ class Api::MessagesController < Api::ApplicationController
 
   belongs_to :comlink, foreign_key: :token
   permit_all_params!
+
+  presented_by Api::MessagePresenter
 end

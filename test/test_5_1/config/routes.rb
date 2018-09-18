@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     end
 
     resources :comlinks, only: [], param: :token do
-      resources :messages, only: [:create]
+      resources :messages
     end
   end
 

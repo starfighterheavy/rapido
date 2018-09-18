@@ -81,6 +81,10 @@ module Rapido
       def resource_class_name
         resource_class_from_controller
       end
+
+      def presented_by(presenter_class)
+        @presenter ||= presenter_class
+      end
     end
 
     private
@@ -136,6 +140,10 @@ module Rapido
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
         end
+      end
+
+      def presenter
+        setting(:presenter)
       end
 
       def resource
