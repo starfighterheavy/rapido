@@ -8,4 +8,5 @@ class Api::MessagesController < Api::ApplicationController
   permit_all_params!
 
   presented_by Api::MessagePresenter
+  collection_presented_by Api::MessageCollectionPresenter
 end

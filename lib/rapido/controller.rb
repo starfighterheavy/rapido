@@ -44,6 +44,10 @@ module Rapido
         end
       end
 
+      def collection_presented_by(presenter_class)
+        @collection_presenter ||= presenter_class
+      end
+
       def owner_lookup_defaults
         owner_lookup_param(@owner_class, :id)
         owner_lookup_field(:id)
@@ -97,6 +101,10 @@ module Rapido
         rescue NoMethodError
           raise "Rapido::Controller must belong to something that responds to build or define a build method"
         end
+      end
+
+      def collection_presenter
+        setting(:collection_presenter)
       end
 
       def owner_class

@@ -55,6 +55,7 @@ module Rapido
     end
 
     def present_resource_collection(resource_collection)
+      return collection_presenter.new(resource_collection).as_json if collection_presenter
       return resource_collection.map{ |r| presenter.new(r).as_json } if presenter
       resource_collection.map(&:to_h)
     end
