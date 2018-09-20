@@ -44,8 +44,9 @@ module Rapido
         end
       end
 
-      def collection_presented_by(presenter_class)
+      def collection_presented_by(presenter_class, *args)
         @collection_presenter ||= presenter_class
+        @collection_presenter_args = args if args.count > 0
       end
 
       def owner_lookup_defaults
@@ -105,6 +106,10 @@ module Rapido
 
       def collection_presenter
         setting(:collection_presenter)
+      end
+
+      def collection_presenter_args
+        setting(:collection_presenter_args)
       end
 
       def owner_class

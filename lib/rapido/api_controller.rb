@@ -55,7 +55,8 @@ module Rapido
     end
 
     def present_resource_collection(resource_collection)
-      return collection_presenter.new(resource_collection).as_json if collection_presenter
+      args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
+      return collection_presenter.new(*[resource_collection, *args].compact).as_json if collection_presenter
       return resource_collection.map{ |r| presenter.new(r).as_json } if presenter
       resource_collection.map(&:to_h)
     end

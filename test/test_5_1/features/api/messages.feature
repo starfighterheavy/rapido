@@ -27,7 +27,7 @@ Feature: Controllers that require no authority and use a presenter
       "id": 1
     }
     """
-    When I send a GET request to "/api/comlinks/123/messages"
+    When I send a GET request to "/api/comlinks/123/messages?query=how"
     Then the JSON response should be:
     """
     [
@@ -40,21 +40,26 @@ Feature: Controllers that require no authority and use a presenter
     When I send a PATCH request to "/api/comlinks/123/messages/1" with the following:
     """
     {
-      "content": "How is Aldaaran?"
+      "content": "What?!"
     }
     """
     Then the JSON response should be:
     """
     {
-      "content": "How is Aldaaran?",
+      "content": "What?!",
       "id": 1
     }
+    """
+    When I send a GET request to "/api/comlinks/123/messages?query=how"
+    Then the JSON response should be:
+    """
+    []
     """
     When I send a DELETE request to "/api/comlinks/123/messages/1"
     Then the JSON response should be:
     """
     {
-      "content": "How is Aldaaran?",
+      "content": "What?!",
       "id": 1
     }
     """
