@@ -8,7 +8,9 @@ Rapido is a simple, highly opinionated library that can be included into your Ra
 
 #### `belongs_to`
 
-Specifies the owner of the resource. For example, if many `Post` belonged to `User`, then in the `PostsController`, the following would be included: `belongs_to :user` and `Post` would be retreieved like so: `User.find(params[:user_id]).posts.find([params[:id])`.
+Specifies the owner of the resource. For example, if many `Post` belonged to `User`, then in the `PostsController`, the following would be included: `belongs_to :user` and `Post` would be retrieved like so:
+
+`User.find(params[:user_id]).posts.find([params[:id])`.
 
 ##### Optional Parameters
 
@@ -18,23 +20,35 @@ Default `false`. If `true`, will treat the `belongs_to` as `has_one`.
 
 **owner** 
 
-This is the owner of the owner - if supplied, will be used to retrieve the owner. For example, if `User` belongs to `Group`, `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, owner: :current_group` was supplied, then the User would be retrieved from group before Post is retrieved from user, like so: `current_group.users.find(params[:user_id]).posts.find(params[:id])`.
+This is the owner of the owner - if supplied, will be used to retrieve the owner. For example, if `User` belongs to `Group`, `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, owner: :current_group` was supplied, then the User would be retrieved from group before Post is retrieved from user, like so:
+
+`current_group.users.find(params[:user_id]).posts.find(params[:id])`.
 
 **getter**
 
-Specifies the method to call to retrieve the owner, rather than retrieving by with URL parameters. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, getter: :current_user` was supplied, then the post would be retrieved like so: `current_user.posts.find(params[:id])`. This can be useful when ownership exists but is not reflected in the route structure explicitly.
+Specifies the method to call to retrieve the owner, rather than retrieving by with URL parameters. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, getter: :current_user` was supplied, then the post would be retrieved like so: 
+
+`current_user.posts.find(params[:id])`. 
+
+This can be useful when ownership exists but is not reflected in the route structure explicitly.
 
 **foreign_key**
 
-Default `id`. Specifies the name of the lookup column for the owner. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, foreign_key: :token` is supplied, then the post would be retrieved like so: `User.find_by(token: id).posts.find(params[:id])`.
+Default `id`. Specifies the name of the lookup column for the owner. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, foreign_key: :token` is supplied, then the post would be retrieved like so: 
+
+`User.find_by(token: id).posts.find(params[:id])`.
 
 **foreign_key_param**
 
-Default `[singular owner name]_id`. Specifies the param used as the owner's foreign key. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, foreign_key_param: :author_id` is supplied, then the post would be retrieved like so: `User.find(params[:author_id]).posts.find(params[:id])`.
+Default `[singular owner name]_id`. Specifies the param used as the owner's foreign key. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, foreign_key_param: :author_id` is supplied, then the post would be retrieved like so: 
+
+`User.find(params[:author_id]).posts.find(params[:id])`.
 
 #### `lookup_param`
 
-Specifies the param used to retrieve the resource. For example, if `Post` belongs to `User`, then in the `PostsController` if `lookup_param :token` is supplied, then the post would be retrieved like so: `User.find_by(params[:id]).posts.find_by(token: params[:token])`.
+Specifies the param used to retrieve the resource. For example, if `Post` belongs to `User`, then in the `PostsController` if `lookup_param :token` is supplied, then the post would be retrieved like so: 
+
+`User.find_by(params[:id]).posts.find_by(token: params[:token])`.
 
 #### `presented_by`
 
