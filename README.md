@@ -42,7 +42,15 @@ Specifies the class that will present the resource. This class must accept the r
 
 #### `collection_presented_by`
 
-Specifies the class that will present a collection of resources, as in the index method. Similar to `presented_by`, the class must accept the resource collection as the only argument at initialization, and respond to `as_json` for output when used with the `Rapido::ApiController`.
+Specifies the class that will present a collection of resources, as in the index method. Similar to `presented_by`, the class must accept the resource collection as the only argument at initialization, and respond to `as_json` for output when used with the `Rapido::ApiController`. The `collection_presented_by` can also accept a list of arguments, as symbols, that should be pulled from the `params` hash and passed to presenter class at initialization as optional argments.
+
+For example, if `params` contained a `:filter` parameter which should be used by the presenter to filter the collection, then the following would work: 
+
+`collection_presented_by WidgetsCollectionPresenter, :filter`
+
+The `initialize` method of the presenter should be structured as such:
+
+`def initialize(widgets, filter = nil)`
 
 #### `attr_permitted`
 
