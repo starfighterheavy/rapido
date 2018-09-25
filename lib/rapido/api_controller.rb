@@ -16,35 +16,49 @@ module Rapido
     end
 
     def index
-      render json: resource_collection.map(&:to_h)
+      render json: present_resource_collection(resource_collection)
     end
 
     def show
-      render json: resource.to_h
+      render json: present_resource(resource)
     end
 
     def create
       new_resource = build_resource(resource_params)
       if new_resource.save
-        render json: new_resource.to_h, status: :created
+        render json: present_resource(new_resource), status: :created
       else
         render json: { errors: new_resource.errors.full_messages }, status: 422
       end
     end
 
     def destroy
-      resource_hsh = resource.to_h
+      resource_before_destruction = present_resource(resource)
       resource.destroy
-      render json: resource_hsh
+      render json: resource_before_destruction
     end
 
     def update
       resource.assign_attributes(resource_params)
       if resource.save
-        render json: resource.to_h
+        render json: present_resource(resource)
       else
         render json: { errors: resource.errors.full_messages }, status: 422
       end
+    end
+
+    private
+
+    def present_resource(resource)
+      return presenter.new(resource).as_json if presenter
+      resource.to_h
+    end
+
+    def present_resource_collection(resource_collection)
+      args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
+      return collection_presenter.new(*[resource_collection, *args].compact).as_json if collection_presenter
+      return resource_collection.map{ |r| presenter.new(r).as_json } if presenter
+      resource_collection.map(&:to_h)
     end
   end
 end

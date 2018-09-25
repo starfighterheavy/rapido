@@ -44,6 +44,11 @@ module Rapido
         end
       end
 
+      def collection_presented_by(presenter_class, *args)
+        @collection_presenter ||= presenter_class
+        @collection_presenter_args = args if args.count > 0
+      end
+
       def owner_lookup_defaults
         owner_lookup_param(@owner_class, :id)
         owner_lookup_field(:id)
@@ -81,6 +86,10 @@ module Rapido
       def resource_class_name
         resource_class_from_controller
       end
+
+      def presented_by(presenter_class)
+        @presenter ||= presenter_class
+      end
     end
 
     private
@@ -93,6 +102,14 @@ module Rapido
         rescue NoMethodError
           raise "Rapido::Controller must belong to something that responds to build or define a build method"
         end
+      end
+
+      def collection_presenter
+        setting(:collection_presenter)
+      end
+
+      def collection_presenter_args
+        setting(:collection_presenter_args)
       end
 
       def owner_class
@@ -136,6 +153,10 @@ module Rapido
         rescue ActiveRecord::RecordNotFound
           raise RecordNotFound
         end
+      end
+
+      def presenter
+        setting(:presenter)
       end
 
       def resource
