@@ -78,6 +78,10 @@ This will disallow any parameters in `create` and `update` actions.
 
 This will permit all parameters in `create` and `update` actions.
 
+## Notes
+
+Authentication & AppController functionality will be deprecated in v0.6 and removed in v1.0. With the 1.0 release, Rapido will remove all functionality that is not strictly oriented to streamlining API Controller development and security.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
