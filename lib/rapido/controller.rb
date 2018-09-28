@@ -193,7 +193,7 @@ module Rapido
           if setting(:has_one)
             owner.send(resource_class_name)
           else
-            owner.send(resource_class_name.pluralize).page(params[:page])
+            owner.send(resource_class_name.pluralize)
           end
         end
       end
