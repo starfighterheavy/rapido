@@ -8,6 +8,7 @@ module Rapido
     include Rapido::Errors
 
     included do
+      Rails.logger.info "The AppController has been deprecated and will be removed in the v1.0 release."
       before_action do
         resource_permitted_params
       end
