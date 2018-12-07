@@ -87,8 +87,9 @@ module Rapido
         resource_class_from_controller
       end
 
-      def presented_by(presenter_class)
+      def presented_by(presenter_class, *args)
         @presenter ||= presenter_class
+        @presenter_args = args if args.count > 0
       end
     end
 
@@ -157,6 +158,10 @@ module Rapido
 
       def presenter
         setting(:presenter)
+      end
+
+      def presenter_args
+        setting(:presenter_args)
       end
 
       def resource

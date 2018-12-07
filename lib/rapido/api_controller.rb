@@ -50,7 +50,8 @@ module Rapido
     private
 
     def present_resource(resource)
-      return presenter.new(resource).as_json if presenter
+      args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
+      return presenter.new(*[resource, *args]).as_json if presenter
       resource.to_h
     end
 
