@@ -13,6 +13,8 @@ module Rapido
       rescue_from RecordNotFound do |e|
         render json: { errors: [ e.to_s ] }, status: 404
       end
+
+      before_action :permit_only_allowed_actions
     end
 
     def index
@@ -92,6 +94,11 @@ module Rapido
     end
 
     def before_update
+    end
+
+    def permit_only_allowed_actions
+      return unless allowed_actions
+      head :unauthorized unless allowed_actions.include?(params[:action])
     end
 
     def present_resource(resource)

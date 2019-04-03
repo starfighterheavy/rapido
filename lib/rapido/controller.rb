@@ -24,6 +24,14 @@ module Rapido
     end
 
     class_methods do
+      def allow_only(*ary)
+        @allowed_actions = ary
+      end
+
+      def attr_permitted(*ary)
+        @resource_permitted_params = ary
+      end
+
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         define_method @owner_class do
@@ -71,10 +79,6 @@ module Rapido
         @resource_lookup_param = str.to_sym
       end
 
-      def attr_permitted(*ary)
-        @resource_permitted_params = ary
-      end
-
       def permit_all_params!
         @permit_all_params = true
       end
@@ -94,6 +98,10 @@ module Rapido
     end
 
     private
+
+      def allowed_actions
+        setting(:allowed_actions)
+      end
 
       def build_resource(params = {})
         return owner.send("build_" + resource_class_name, params) if setting(:has_one)
