@@ -26,13 +26,13 @@ module Rapido
     def create
       before_build
       new_resource = build_resource(resource_params)
-      before_create
+      before_create(new_resource)
       if new_resource.save
-        after_create_success
+        after_create_success(new_resource)
         return if performed?
         render json: present_resource(new_resource), status: :created
       else
-        after_create_failure
+        after_create_failure(new_resource)
         return if performed?
         render json: { errors: new_resource.errors.full_messages }, status: 422
       end
@@ -64,10 +64,10 @@ module Rapido
 
     private
 
-    def after_create_failure
+    def after_create_failure(new_resource)
     end
 
-    def after_create_success
+    def after_create_success(new_resource)
     end
 
     def after_destroy_success
@@ -85,7 +85,7 @@ module Rapido
     def before_build
     end
 
-    def before_create
+    def before_create(new_resource)
     end
 
     def before_destroy
