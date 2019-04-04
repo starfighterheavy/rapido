@@ -98,7 +98,7 @@ module Rapido
 
     def permit_only_allowed_actions
       return unless allowed_actions
-      head :unauthorized unless allowed_actions.include?(params[:action])
+      head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
     end
 
     def present_resource(resource)
