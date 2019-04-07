@@ -63,7 +63,7 @@ module Rapido
       end
 
       def owner_lookup_param(*args)
-        return @owner_lookup_param = str.to_sym if args.count == 1
+        return @owner_lookup_param = args.to_sym if args.count == 1
         @owner_lookup_param = args.join('_').to_sym
       end
 
