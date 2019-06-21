@@ -79,10 +79,6 @@ module Rapido
         @resource_lookup_param = str.to_sym
       end
 
-      def permit_all_params!
-        @permit_all_params = true
-      end
-
       def resource_class_from_controller
         self.name.split('::')[-1].remove('Controller').singularize.underscore
       end
@@ -224,11 +220,7 @@ module Rapido
       def resource_params
         return {} if setting(:permit_no_params)
         base = params.require(resource_class_name)
-        if setting(:permit_all_params)
-          base.permit!
-        else
-          base.permit(resource_permitted_params)
-        end
+        base.permit(resource_permitted_params)
       end
 
       def setting(var)
