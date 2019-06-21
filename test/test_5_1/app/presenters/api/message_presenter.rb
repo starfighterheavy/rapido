@@ -14,7 +14,7 @@ class Api::MessagePresenter
 
   private
 
-  def message
-    @message
-  end
+    def message
+      @message
+    end
 end

@@ -9,11 +9,11 @@ class HydrospannersController < ApplicationController
 
   private
 
-  def after_create_success(hydrospanner)
-    render plain: "Rendered text: " + hydrospanner.name
-  end
+    def after_create_success(hydrospanner)
+      render plain: 'Rendered text: ' + hydrospanner.name
+    end
 
-  def after_create_failure(*)
-    render plain: "Rendered text: " + flash[:error]
-  end
+    def after_create_failure(*)
+      render plain: 'Rendered text: ' + flash[:error]
+    end
 end

@@ -1,11 +1,10 @@
 class EmptyWidget
   def initialize(toolbox)
-
   end
 
   def to_h
     {
-      "status": "Well done!"
+      "status": 'Well done!'
     }
   end
 

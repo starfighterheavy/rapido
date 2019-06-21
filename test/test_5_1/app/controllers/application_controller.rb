@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def current_user_account
-    current_user.account
-  end
+    def current_user_account
+      current_user.account
+    end
 end

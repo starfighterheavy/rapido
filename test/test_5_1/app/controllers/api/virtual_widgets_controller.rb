@@ -9,11 +9,11 @@ class Api::VirtualWidgetsController < Api::ApplicationController
 
   private
 
-  def build
-    VirtualWidget.new(toolbox, params)
-  end
+    def build
+      VirtualWidget.new(toolbox, params)
+    end
 
-  def find
-    VirtualWidget.new(toolbox)
-  end
+    def find
+      VirtualWidget.new(toolbox)
+    end
 end

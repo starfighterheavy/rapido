@@ -104,12 +104,12 @@ module Rapido
       end
 
       def build_resource(params = {})
-        return owner.send("build_" + resource_class_name, params) if setting(:has_one)
+        return owner.send('build_' + resource_class_name, params) if setting(:has_one)
         return owner.send(resource_class_name.pluralize).build(params) if owner && owner.respond_to?(resource_class_name.pluralize)
         begin
           send(:build)
         rescue NoMethodError
-          raise "Rapido::Controller must belong to something that responds to build or define a build method"
+          raise 'Rapido::Controller must belong to something that responds to build or define a build method'
         end
       end
 
@@ -182,9 +182,9 @@ module Rapido
               .find_by!(resource_lookup_param => params[resource_lookup_param])
           else
             begin NoMethodError
-              send(:find)
+                  send(:find)
             rescue
-              raise "Rapido::Controller must belong to something that has many or has one of resource, or define a find method"
+              raise 'Rapido::Controller must belong to something that has many or has one of resource, or define a find method'
             end
           end
        rescue ActiveRecord::RecordNotFound

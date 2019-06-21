@@ -66,52 +66,52 @@ module Rapido
 
     private
 
-    def after_create_failure(new_resource)
-    end
+      def after_create_failure(new_resource)
+      end
 
-    def after_create_success(new_resource)
-    end
+      def after_create_success(new_resource)
+      end
 
-    def after_destroy_success
-    end
+      def after_destroy_success
+      end
 
-    def after_update_failure
-    end
+      def after_update_failure
+      end
 
-    def after_update_success
-    end
+      def after_update_success
+      end
 
-    def before_assign_attributes
-    end
+      def before_assign_attributes
+      end
 
-    def before_build
-    end
+      def before_build
+      end
 
-    def before_create(new_resource)
-    end
+      def before_create(new_resource)
+      end
 
-    def before_destroy
-    end
+      def before_destroy
+      end
 
-    def before_update
-    end
+      def before_update
+      end
 
-    def permit_only_allowed_actions
-      return unless allowed_actions
-      head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
-    end
+      def permit_only_allowed_actions
+        return unless allowed_actions
+        head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
+      end
 
-    def present_resource(resource)
-      args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
-      return presenter.new(*[resource, *args]).as_json if presenter
-      resource.to_h
-    end
+      def present_resource(resource)
+        args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
+        return presenter.new(*[resource, *args]).as_json if presenter
+        resource.to_h
+      end
 
-    def present_resource_collection(resource_collection)
-      args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
-      return collection_presenter.new(*[resource_collection, *args]).as_json if collection_presenter
-      return resource_collection.map{ |r| presenter.new(r).as_json } if presenter
-      resource_collection.map(&:to_h)
-    end
+      def present_resource_collection(resource_collection)
+        args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
+        return collection_presenter.new(*[resource_collection, *args]).as_json if collection_presenter
+        return resource_collection.map { |r| presenter.new(r).as_json } if presenter
+        resource_collection.map(&:to_h)
+      end
   end
 end

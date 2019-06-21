@@ -4,7 +4,7 @@ module Rapido
       extend ActiveSupport::Concern
 
       included do
-        Rails.logger.info "The Auth module has been deprecated and will be removed in the 1.0 release."
+        Rails.logger.info 'The Auth module has been deprecated and will be removed in the 1.0 release.'
         before_action :load_authority
 
         rescue_from LackAuthority do |e|
