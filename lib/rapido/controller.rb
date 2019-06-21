@@ -24,6 +24,14 @@ module Rapido
     end
 
     class_methods do
+      def allow_only(*ary)
+        @allowed_actions = ary
+      end
+
+      def attr_permitted(*ary)
+        @resource_permitted_params = ary
+      end
+
       def belongs_to(sym, opts = {})
         @owner_class = sym.to_sym
         define_method @owner_class do
@@ -55,7 +63,7 @@ module Rapido
       end
 
       def owner_lookup_param(*args)
-        return @owner_lookup_param = str.to_sym if args.count == 1
+        return @owner_lookup_param = args[0].to_sym if args.count == 1
         @owner_lookup_param = args.join('_').to_sym
       end
 
@@ -69,14 +77,6 @@ module Rapido
 
       def lookup_param(str)
         @resource_lookup_param = str.to_sym
-      end
-
-      def attr_permitted(*ary)
-        @resource_permitted_params = ary
-      end
-
-      def permit_all_params!
-        @permit_all_params = true
       end
 
       def resource_class_from_controller
@@ -95,13 +95,17 @@ module Rapido
 
     private
 
+      def allowed_actions
+        setting(:allowed_actions)
+      end
+
       def build_resource(params = {})
-        return owner.send("build_" + resource_class_name, params) if setting(:has_one)
+        return owner.send('build_' + resource_class_name, params) if setting(:has_one)
         return owner.send(resource_class_name.pluralize).build(params) if owner && owner.respond_to?(resource_class_name.pluralize)
         begin
           send(:build)
         rescue NoMethodError
-          raise "Rapido::Controller must belong to something that responds to build or define a build method"
+          raise 'Rapido::Controller must belong to something that responds to build or define a build method'
         end
       end
 
@@ -174,9 +178,9 @@ module Rapido
               .find_by!(resource_lookup_param => params[resource_lookup_param])
           else
             begin NoMethodError
-              send(:find)
+                  send(:find)
             rescue
-              raise "Rapido::Controller must belong to something that has many or has one of resource, or define a find method"
+              raise 'Rapido::Controller must belong to something that has many or has one of resource, or define a find method'
             end
           end
        rescue ActiveRecord::RecordNotFound
@@ -216,11 +220,7 @@ module Rapido
       def resource_params
         return {} if setting(:permit_no_params)
         base = params.require(resource_class_name)
-        if setting(:permit_all_params)
-          base.permit!
-        else
-          base.permit(resource_permitted_params)
-        end
+        base.permit(resource_permitted_params)
       end
 
       def setting(var)

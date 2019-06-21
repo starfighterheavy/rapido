@@ -1,0 +1,52 @@
+version: "2"
+checks:
+  argument-count:
+    enabled: true
+    config:
+      threshold: 4
+  complex-logic:
+    enabled: true
+    config:
+      threshold: 8
+  file-lines:
+    enabled: true
+    config:
+      threshold: 350
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 8
+  method-count:
+    enabled: true
+    config:
+      threshold: 30
+  method-lines:
+    enabled: true
+    config:
+      threshold: 25
+  nested-control-flow:
+    enabled: true
+    config:
+      threshold: 4
+  return-statements:
+    enabled: false
+  similar-code:
+    enabled: false
+  identical-code:
+    enabled: false
+plugins:
+  rubocop:
+    enabled: true
+    channel: rubocop-0-70
+  brakeman:
+    enabled: true
+exclude_patterns:
+- "config/"
+- "db/"
+- "dist/"
+- "features/"
+- "**/node_modules/"
+- "script/"
+- "public/"
+- "tmp/"
+- "**/vendor/"

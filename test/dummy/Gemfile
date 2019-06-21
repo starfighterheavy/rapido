@@ -1,0 +1,28 @@
+source 'https://rubygems.org'
+
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
+  "https://github.com/#{repo_name}.git"
+end
+
+gem 'rails', '~> 5.2.3'
+gem 'sqlite3'
+gem 'puma', '~> 3.7'
+gem 'devise', '>= 4.6.0'
+gem 'slim'
+gem 'turbolinks'
+gem 'simple_form'
+gem 'rails-rapido', path: '../../../rapido'
+
+group :development, :test do
+  gem 'pry-byebug'
+  gem 'capybara'
+  gem 'cucumber', '~> 3'
+  gem 'cucumber-rails', '~> 1.6', require: false
+  gem 'cucumber-api-steps', github: 'jayzes/cucumber-api-steps'
+  gem 'cucumber-persona'
+  gem 'cucumber-sammies'
+  gem 'cucumber_priority'
+  gem 'database_cleaner'
+  gem 'rspec-rails'
+end

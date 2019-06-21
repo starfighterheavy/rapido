@@ -76,10 +76,6 @@ Accepts a list of symbols. These symbols specify the attributes that are supplie
 
 This will disallow any parameters in `create` and `update` actions.
 
-#### `permit_all_params!`
-
-This will permit all parameters in `create` and `update` actions.
-
 ## Notes
 
 Authentication & AppController functionality will be deprecated in v0.6 and removed in v1.0. With the 1.0 release, Rapido will remove all functionality that is not strictly oriented to streamlining API Controller development and security.
