@@ -128,7 +128,7 @@ module Rapido
       end
 
       def owner_class_name
-        @owner_class_name ||= owner_class.name.downcase
+        @owner_class_name ||= owner_class.to_s.underscore
       end
 
       def owner_lookup_param
