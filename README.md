@@ -32,6 +32,10 @@ Specifies the method to call to retrieve the owner, rather than retrieving by wi
 
 This can be useful when ownership exists but is not reflected in the route structure explicitly.
 
+**build**
+
+You can create override the class Rapido::Controller build method directly in situations where the owner class does not have a build_[resource] method. Note that `has_one` will execute first if set to true, ignoring any `build` method you create directly, so if you do override it do not set `has_one: true`.
+
 **foreign_key**
 
 Default `id`. Specifies the name of the lookup column for the owner. For example, if `Post` belongs to `User`, then in the `PostsController` if `belongs_to :user, foreign_key: :token` is supplied, then the post would be retrieved like so: 
