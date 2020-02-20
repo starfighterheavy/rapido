@@ -8,7 +8,7 @@ class Api::MessagesController < Api::ApplicationController
 
   belongs_to :comlink, foreign_key: :token
 
-  presented_by Api::MessagePresenter
+  present_with Api::MessagePresenter
 
-  collection_presented_by Api::MessageCollectionPresenter, :query
+  present_collection_with Api::MessageCollectionPresenter, :query
 end

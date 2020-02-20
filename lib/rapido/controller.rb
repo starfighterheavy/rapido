@@ -56,6 +56,7 @@ module Rapido
         @collection_presenter ||= presenter_class
         @collection_presenter_args = args if args.count > 0
       end
+      alias present_collection_with collection_presented_by
 
       def owner_lookup_defaults
         owner_lookup_param(@owner_class, :id)
@@ -91,6 +92,7 @@ module Rapido
         @presenter ||= presenter_class
         @presenter_args = args if args.count > 0
       end
+      alias present_with presented_by
     end
 
     private

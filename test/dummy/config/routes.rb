@@ -14,14 +14,4 @@ Rails.application.routes.draw do
       resources :messages
     end
   end
-
-  namespace :user do
-    resources :protocol_droids, param: :name
-  end
-
-  resources :toolboxes, param: :name do
-    resources :hydrospanners, param: :name
-  end
-
-  root to: 'toolboxes#index'
 end

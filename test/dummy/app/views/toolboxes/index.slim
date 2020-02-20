@@ -1,8 +1,0 @@
-= link_to "New Toolbox", new_toolbox_path
-table
-  thead
-    tr
-      th Name
-  - toolboxes.each do |toolbox|
-    tr
-      td= link_to toolbox.name, toolbox_path(toolbox)
