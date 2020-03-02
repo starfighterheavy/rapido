@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_support/rescuable'
+require 'rapido/controller'
 require 'rapido/errors'
 
 module Rapido
@@ -10,6 +11,8 @@ module Rapido
     include Rapido::Errors
 
     included do
+      include Rapido::Controller
+
       rescue_from RecordNotFound do |e|
         render json: { errors: [ e.to_s ] }, status: 404
       end

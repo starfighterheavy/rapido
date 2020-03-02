@@ -1,7 +1,6 @@
 require 'virtual_widget'
 
 class Api::VirtualWidgetsController < Api::ApplicationController
-  include Rapido::Controller
   include Rapido::ApiController
 
   belongs_to :toolbox, foreign_key: :name

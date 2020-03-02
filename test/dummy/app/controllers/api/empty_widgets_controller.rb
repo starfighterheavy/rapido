@@ -1,7 +1,6 @@
 require 'empty_widget'
 
 class Api::EmptyWidgetsController < Api::ApplicationController
-  include Rapido::Controller
   include Rapido::ApiController
 
   belongs_to :toolbox, foreign_key: :name, has_one: true

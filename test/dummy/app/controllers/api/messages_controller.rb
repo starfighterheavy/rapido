@@ -1,5 +1,4 @@
 class Api::MessagesController < Api::ApplicationController
-  include Rapido::Controller
   include Rapido::ApiController
 
   attr_permitted :content
