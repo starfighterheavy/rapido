@@ -8,7 +8,10 @@ Rapido is a simple, highly opinionated library that can be included into your Ra
 
 Below is a typical example of a class using Rapido. More examples are available in the [dummy application](https://github.com/starfighterheavy/rapido/tree/master/test/dummy).
 
-```
+```ruby
+# Create, Index: https://www.example.com/api/documents/
+# Show, update, delete: https://www.example.com/api/documents/123
+
 class DocumentsController < ApplicationController
   include Rapido::ApiController
   
@@ -18,7 +21,26 @@ class DocumentsController < ApplicationController
   
   present_with DocumentPresenter
   
-  present_collection_with DocumentPresenter, :query # Query could be a string supplied as a URL parameter to search documents by name.
+  present_collection_with DocumentCollectionPresenter, :query # Query could be a string supplied as a URL parameter to search documents by name.
+end
+```
+
+Another example where records are automatically retrieved from route parameters.
+
+```ruby
+# Create, Index: https://www.example.com/api/documents/123/pages
+# Show, update, delete: https://www.example.com/api/documents/123/pages/345
+
+class PagesController < ApplicationController
+  include Rapido::ApiController
+  
+  attr_permitted :contents, :page_number
+  
+  belongs_to :document, owner: :current_user
+  
+  present_with PagePresenter
+  
+  present_collection_with PageCollectionPresenter
 end
 ```
 
