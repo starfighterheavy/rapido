@@ -4,6 +4,24 @@
 
 Rapido is a simple, highly opinionated library that can be included into your Rails controllers to enforce standardized behavior and security.
 
+## Example
+
+Below is a typical example of a class using Rapido. More examples are available in the [dummy application](https://github.com/starfighterheavy/rapido/tree/master/test/dummy).
+
+"""
+class DocumentsController < ApplicationController
+  include Rapido::ApiController
+  
+  attr_permitted :file, file_name, :category
+  
+  belongs_to :user, getter: :current_user
+  
+  present_with DocumentPresenter
+  
+  present_collection_with DocumentPresenter, :query # Query could be a string supplied as a URL parameter to search documents by name.
+end
+"""
+
 ## API
 
 ### `attr_permitted`
