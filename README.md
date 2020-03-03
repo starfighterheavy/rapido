@@ -6,7 +6,11 @@ Rapido is a simple, highly opinionated library that can be included into your Ra
 
 ## API
 
-#### `belongs_to`
+### `attr_permitted`
+
+Accepts a list of symbols. These symbols specify the attributes that are supplied to StrongParameters as permitted parameters in `create` and `update` actions.
+
+### `belongs_to`
 
 Specifies the owner of the resource. For example, if many `Post` belonged to `User`, then in the `PostsController`, the following would be included: `belongs_to :user` and `Post` would be retrieved like so:
 
@@ -48,41 +52,56 @@ Default `[singular owner name]_id`. Specifies the param used as the owner's fore
 
 `User.find(params[:author_id]).posts.find(params[:id])`.
 
-#### `lookup_param`
+### `lookup_param`
 
 Specifies the param used to retrieve the resource. For example, if `Post` belongs to `User`, then in the `PostsController` if `lookup_param :token` is supplied, then the post would be retrieved like so: 
 
 `User.find_by(params[:id]).posts.find_by(token: params[:token])`.
 
-#### `presented_by`
+### `present_with`
 
 Specifies the class that will present the resource. This class must accept the resource as the only parameter at initialization, and respond to the `as_json` for output when used with the `Rapido::ApiController`.
 
 For example, if `params` contained a `:filter` parameter which should be used by the presenter , then the following would work:
 
-`presented_by WidgetsPresenter, :filter`
+`present_with WidgetsPresenter, :filter`
 
 The `initialize` method of the presenter should be structured as such:
 
 `def initialize(widgets, filter = nil)`
 
-#### `collection_presented_by`
+### `present_collection_with`
 
 Specifies the class that will present a collection of resources, as in the index method. Similar to `presented_by`, the class must accept the resource collection as the only argument at initialization, and respond to `as_json` for output when used with the `Rapido::ApiController`. The `collection_presented_by` can also accept a list of arguments, as symbols, that should be pulled from the `params` hash and passed to presenter class at initialization as optional argments.
 
-Collection presenters can also be provided args, similar to `presented_by`
+Collection presenters can also be provided args, similar to `present_with`
 
-#### `attr_permitted`
-
-Accepts a list of symbols. These symbols specify the attributes that are supplied to StrongParameters as permitted parameters in `create` and `update` actions.
-
-#### `permit_no_params!`
+### `permit_no_params!`
 
 This will disallow any parameters in `create` and `update` actions.
 
-## Notes
+## Filters
 
-Authentication & AppController functionality will be deprecated in v0.6 and removed in v1.0. With the 1.0 release, Rapido will remove all functionality that is not strictly oriented to streamlining API Controller development and security.
+The following filters are available to override, similar to the standard Rails action filters.
+
+#### Create
+
+* before_build
+* before_create
+* after_create_success
+* after_create_failure
+
+#### Destroy
+
+* before_destroy
+* after_destroy_success
+
+#### Update
+
+* before_assign_attributes
+* before_updat
+* after_update_success
+* after_update_failure
 
 ## Development
 
