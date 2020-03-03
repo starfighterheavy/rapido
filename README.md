@@ -8,7 +8,7 @@ Rapido is a simple, highly opinionated library that can be included into your Ra
 
 Below is a typical example of a class using Rapido. More examples are available in the [dummy application](https://github.com/starfighterheavy/rapido/tree/master/test/dummy).
 
-"""
+```
 class DocumentsController < ApplicationController
   include Rapido::ApiController
   
@@ -20,7 +20,7 @@ class DocumentsController < ApplicationController
   
   present_collection_with DocumentPresenter, :query # Query could be a string supplied as a URL parameter to search documents by name.
 end
-"""
+```
 
 ## API
 
