@@ -4,7 +4,7 @@ class Api::ApplicationController < ActionController::API
 
   class LackAuthority < StandardError; end
 
-  rescue_from LackAuthority do |e|
+  rescue_from LackAuthority do |_e|
     render json: { error: 'Request denied.' }, status: 401
   end
 

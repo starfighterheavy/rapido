@@ -10,7 +10,7 @@ class Api::MessageCollectionPresenter
 
   private
 
-    def messages
-      @messages
-    end
+  def messages
+    @messages
+  end
 end

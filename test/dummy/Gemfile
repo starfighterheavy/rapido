@@ -5,22 +5,22 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 6.0'
-gem 'sqlite3'
-gem 'puma'
 gem 'devise'
-gem 'slim'
+gem 'puma'
+gem 'rails', '~> 6.0'
 gem 'rails-rapido', path: '../../../rapido'
+gem 'slim'
+gem 'sqlite3'
 
 group :development, :test do
-  gem 'pry-byebug'
   gem 'capybara'
   gem 'cucumber', '~> 3'
-  gem 'cucumber-rails', '~> 1.6', require: false
   gem 'cucumber-api-steps', github: 'jayzes/cucumber-api-steps'
   gem 'cucumber-persona'
+  gem 'cucumber-rails', '~> 1.6', require: false
   gem 'cucumber-sammies'
   gem 'cucumber_priority'
   gem 'database_cleaner'
+  gem 'pry-byebug'
   gem 'rspec-rails'
 end

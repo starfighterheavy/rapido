@@ -1,124 +1,431 @@
+# Continue here: https://raw.githubusercontent.com/rubocop-hq/rubocop/master/config/default.yml
+# TODO: Skipped rails or naming or style
+
 AllCops:
-  TargetRubyVersion: 2.3
-  # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
-  # to ignore them, so only the ones explicitly set in this file are enabled.
-  DisabledByDefault: true
   Exclude:
-    - '**/templates/**/*'
-    - '**/vendor/**/*'
-    - 'actionpack/lib/action_dispatch/journey/parser.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - '.git/**/*'
+    - 'db/**/*'
+    - 'lib/tasks/cucumber.rake'
+    - 'config/routes.rb'
+    - 'features/**/*'
+  EnabledByDefault: false
+  DisabledByDefault: true
 
-# Prefer &&/|| over and/or.
-Style/AndOr:
+require: rubocop-performance
+
+Bundler/DuplicatedGem:
   Enabled: true
 
-# Do not use braces for hash literals when they are the last argument of a
-# method call.
-Style/BracesAroundHashParameters:
+Bundler/InsecureProtocolSource:
   Enabled: true
 
-# Align `when` with `case`.
-Style/CaseIndentation:
+Bundler/OrderedGems:
   Enabled: true
 
-# Align comments with method definitions.
-Style/CommentIndentation:
+Gemspec/DuplicatedAssignment:
   Enabled: true
 
-# No extra empty lines.
-Style/EmptyLines:
+Gemspec/OrderedDependencies:
   Enabled: true
 
-# In a regular class definition, no empty lines around the body.
-Style/EmptyLinesAroundClassBody:
+Gemspec/RequiredRubyVersion:
   Enabled: true
 
-# In a regular method definition, no empty lines around the body.
-Style/EmptyLinesAroundMethodBody:
+Layout/BlockEndNewline:
   Enabled: true
 
-# In a regular module definition, no empty lines around the body.
-Style/EmptyLinesAroundModuleBody:
+Layout/ClassStructure:
   Enabled: true
 
-# Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
-Style/HashSyntax:
+Layout/ClosingParenthesisIndentation:
   Enabled: true
 
-# Method definitions after `private` or `protected` isolated calls need one
-# extra level of indentation.
-Style/IndentationConsistency:
-  Enabled: true
-  EnforcedStyle: rails
-
-# Two spaces, no tabs (for indentation).
-Style/IndentationWidth:
+Layout/ConditionPosition:
   Enabled: true
 
-Style/SpaceAfterColon:
+Layout/DefEndAlignment:
   Enabled: true
 
-Style/SpaceAfterComma:
+Layout/ElseAlignment:
   Enabled: true
 
-Style/SpaceAroundEqualsInParameterDefault:
+Layout/EmptyLineBetweenDefs:
   Enabled: true
 
-Style/SpaceAroundKeyword:
+Layout/EmptyLines:
   Enabled: true
 
-Style/SpaceAroundOperators:
+Layout/EmptyLinesAroundAccessModifier:
   Enabled: true
 
-Style/SpaceBeforeFirstArg:
-    Enabled: true
-
-# Defining a method with parameters needs parentheses.
-Style/MethodDefParentheses:
+Layout/EndAlignment:
   Enabled: true
 
-# Use `foo {}` not `foo{}`.
-Style/SpaceBeforeBlockBraces:
+Layout/EndOfLine:
   Enabled: true
 
-# Use `foo { bar }` not `foo {bar}`.
-Style/SpaceInsideBlockBraces:
+Layout/EmptyLinesAroundArguments:
   Enabled: true
 
-# Use `{ a: 1 }` not `{a:1}`.
-Style/SpaceInsideHashLiteralBraces:
+Layout/IndentationWidth:
   Enabled: true
 
-Style/SpaceInsideParens:
+Layout/InitialIndentation:
   Enabled: true
 
-# Check quotes usage according to lint rule below.
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: single_quotes
-
-# Detect hard tabs, no hard tabs.
-Style/Tab:
+Layout/LeadingEmptyLines:
   Enabled: true
 
-# Blank lines should not have any spaces.
-Style/TrailingBlankLines:
+Layout/SpaceAfterColon:
   Enabled: true
 
-# No trailing whitespace.
-Style/TrailingWhitespace:
+Layout/SpaceAfterComma:
   Enabled: true
 
-# Use quotes for string literals when they are enough.
-Style/UnneededPercentQ:
+Layout/SpaceAfterNot:
   Enabled: true
 
-# Align `end` with the matching keyword or starting expression except for
-# assignments, where it should be aligned with the LHS.
-Lint/EndAlignment:
+Layout/SpaceAfterSemicolon:
   Enabled: true
-  EnforcedStyleAlignWith: variable
 
-# Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+
+Layout/SpaceAroundKeyword:
+  Enabled: true
+
+Layout/SpaceBeforeComma:
+  Enabled: true
+
+Layout/SpaceInsideStringInterpolation:
+  Enabled: true
+
+Layout/IndentationStyle:
+  Enabled: true
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+
+Layout/TrailingWhitespace:
+  Enabled: true
+
+Lint/AssignmentInCondition:
+  Enabled: true
+
+Lint/BooleanSymbol:
+  Enabled: true
+
+Lint/CircularArgumentReference:
+  Enabled: true
+
+Lint/Debugger:
+  Enabled: true
+
+Lint/DuplicateCaseCondition:
+  Enabled: true
+
+Lint/DuplicateMethods:
+  Enabled: true
+
+Lint/DuplicateHashKey:
+  Enabled: true
+
+Lint/EachWithObjectArgument:
+  Enabled: true
+
+Lint/ElseLayout:
+  Enabled: true
+
+Lint/EmptyEnsure:
+  Enabled: true
+
+Lint/EmptyExpression:
+  Enabled: true
+
+Lint/EmptyInterpolation:
+  Enabled: true
+
+Lint/EmptyWhen:
+  Enabled: true
+
+Lint/EnsureReturn:
+  Enabled: true
+
+Lint/FloatOutOfRange:
+  Enabled: true
+
+Lint/FormatParameterMismatch:
+  Enabled: true
+
+Lint/SuppressedException:
+  Enabled: true
+
+Lint/ImplicitStringConcatenation:
+  Enabled: true
+
+Lint/IneffectiveAccessModifier:
+  Enabled: true
+
+Lint/InheritException:
+  Enabled: true
+
+Lint/InterpolationCheck:
+  Enabled: true
+
+Lint/LiteralAsCondition:
+  Enabled: true
+
+Lint/LiteralInInterpolation:
+  Enabled: true
+
+Lint/Loop:
+  Enabled: true
+
+Lint/MissingCopEnableDirective:
+  Enabled: true
+
+Lint/MultipleComparison:
+  Enabled: true
+
+Lint/NestedMethodDefinition:
+  Enabled: true
+
+Lint/NextWithoutAccumulator:
+  Enabled: true
+
+Lint/NonLocalExitFromIterator:
+  Enabled: true
+
+# This caused too much confusion.
+Lint/NumberConversion:
+  Enabled: false
+
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: true
+
+Lint/PercentStringArray:
+  Enabled: true
+
+Lint/PercentSymbolArray:
+  Enabled: true
+
+Lint/RandOne:
+  Enabled: true
+
+Lint/RedundantWithIndex:
+  Enabled: true
+
+Lint/RedundantWithObject:
+  Enabled: true
+
+Lint/RegexpAsCondition:
+  Enabled: true
+
 Lint/RequireParentheses:
+  Enabled: true
+
+Lint/RescueException:
+  Enabled: true
+
+Lint/RescueType:
+  Enabled: true
+
+Lint/ReturnInVoidContext:
+  Enabled: true
+
+Lint/SafeNavigationChain:
+  Enabled: true
+
+Lint/SafeNavigationConsistency:
+  Enabled: true
+
+Lint/ShadowedArgument:
+  Enabled: true
+
+Lint/ShadowedException:
+  Enabled: true
+
+Lint/ShadowingOuterLocalVariable:
+  Enabled: true
+
+Lint/RedundantStringCoercion:
+  Enabled: true
+
+Lint/Syntax:
+  Enabled: true
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: true
+
+Lint/UnifiedInteger:
+  Enabled: true
+
+Lint/RedundantRequireStatement:
+  Enabled: true
+
+Lint/RedundantSplatExpansion:
+  Enabled: true
+
+Lint/UnreachableCode:
+  Enabled: true
+
+Lint/UnusedBlockArgument:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+
+Lint/UselessAccessModifier:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Lint/UselessComparison:
+  Enabled: true
+
+Lint/UselessElseWithoutRescue:
+  Enabled: true
+
+Lint/UselessSetterCall:
+  Enabled: true
+
+Lint/Void:
+  Enabled: true
+  
+Metrics/AbcSize:
+  Enabled: true
+  Max: 150
+
+Metrics/BlockLength:
+  Enabled: true
+  Max: 100
+
+Metrics/BlockNesting:
+  Enabled: true
+  Max: 3
+
+Metrics/ClassLength:
+  Description: 'Avoid long classes'
+  Enabled: true
+  Max: 250
+
+Metrics/CyclomaticComplexity:
+  Enabled: true
+  Max: 12
+
+Layout/LineLength:
+  Enabled: true
+  Max: 200
+
+Metrics/MethodLength:
+  Description: 'Avoid long methods.'
+  Enabled: true
+  Max: 30
+
+Metrics/ModuleLength:
+  Description: 'Avoid long modules.'
+  Enabled: true
+  Max: 250
+
+Metrics/ParameterLists:
+  Description: 'Avoid long parameter lists.'
+  Enabled: true
+  Max: 100
+
+Metrics/PerceivedComplexity:
+  Enabled: true
+  Max: 15
+
+Performance/Caller:
+  Enabled: true
+
+Performance/Casecmp:
+  Enabled: true
+
+# TODO: Re-enable
+Performance/ChainArrayAllocation:
+  Enabled: false
+
+Performance/CompareWithBlock:
+  Enabled: true
+
+Performance/Count:
+  Enabled: true
+
+Performance/Detect:
+  Enabled: true
+
+Performance/DoubleStartEndWith:
+  Enabled: true
+
+Performance/EndWith:
+  Enabled: true
+
+Performance/FixedSize:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+
+Performance/InefficientHashSearch:
+  Enabled: true
+
+Performance/RangeInclude:
+  Enabled: true
+
+Performance/RedundantBlockCall:
+  Enabled: true
+
+Performance/RedundantMatch:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Style/RedundantSortBy:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Style/Sample:
+  Enabled: true
+
+Performance/Size:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/StringReplacement:
+  Enabled: true
+
+Performance/TimesMap:
+  Enabled: true
+
+Performance/UnfreezeString:
+  Enabled: true
+
+Style/RedundantSort:
+  Enabled: true
+
+Security/Eval:
+  Enabled: true
+
+Security/JSONLoad:
+  Enabled: true
+
+Security/MarshalLoad:
+  Enabled: true
+
+Security/Open:
+  Enabled: true
+
+Security/YAMLLoad:
   Enabled: true

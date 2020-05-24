@@ -97,136 +97,136 @@ module Rapido
 
     private
 
-      def allowed_actions
-        setting(:allowed_actions)
-      end
+    def allowed_actions
+      setting(:allowed_actions)
+    end
 
-      def build_resource(params = {})
-        return owner.send('build_' + resource_class_name, params) if setting(:has_one)
-        return owner.send(resource_class_name.pluralize).build(params) if owner && owner.respond_to?(resource_class_name.pluralize)
-        begin
-          send(:build)
-        rescue NoMethodError
-          raise 'Rapido::Controller must belong to something that responds to build or define a build method'
-        end
+    def build_resource(params = {})
+      return owner.send('build_' + resource_class_name, params) if setting(:has_one)
+      return owner.send(resource_class_name.pluralize).build(params) if owner && owner.respond_to?(resource_class_name.pluralize)
+      begin
+        send(:build)
+      rescue NoMethodError => _e
+        raise 'Rapido::Controller must belong to something that responds to build or define a build method'
       end
+    end
 
-      def collection_presenter
-        setting(:collection_presenter)
+    def collection_presenter
+      setting(:collection_presenter)
+    end
+
+    def collection_presenter_args
+      setting(:collection_presenter_args)
+    end
+
+    def owner_class
+      return nil unless setting(:owner_class)
+      @owner_class ||= begin
+        name = setting(:owner_class)
+        name.to_s.camelize.constantize
+      rescue NameError
+        raise BadOwnerClassName, name
       end
+    end
 
-      def collection_presenter_args
-        setting(:collection_presenter_args)
-      end
+    def owner_class_name
+      @owner_class_name ||= owner_class.to_s.underscore
+    end
 
-      def owner_class
-        return nil unless setting(:owner_class)
-        @owner_class ||= begin
-          name = setting(:owner_class)
-          name.to_s.camelize.constantize
-        rescue NameError
-          raise BadOwnerClassName, name
-        end
-      end
+    def owner_lookup_param
+      @owner_lookup_param ||=
+        setting(:owner_lookup_param).to_s
+    end
 
-      def owner_class_name
-        @owner_class_name ||= owner_class.to_s.underscore
-      end
+    def owner_lookup_field
+      @owner_lookup_field ||=
+        (setting(:owner_lookup_field) || owner_lookup_param).to_s
+    end
 
-      def owner_lookup_param
-        @owner_lookup_param ||=
-          setting(:owner_lookup_param).to_s
-      end
-
-      def owner_lookup_field
-        @owner_lookup_field ||=
-          (setting(:owner_lookup_field) || owner_lookup_param).to_s
-      end
-
-      def owner
-        @owner ||= begin
-          if setting(:owner_getter)
-            send(setting(:owner_getter))
-          elsif setting(:owner_class)
-            if setting(:owners_owner)
-              base = send(setting(:owners_owner)).send(owner_class_name.pluralize)
-            else
-              base = owner_class
-            end
-            base.find_by!(owner_lookup_field => params[owner_lookup_param])
+    def owner
+      @owner ||= begin
+        if setting(:owner_getter)
+          send(setting(:owner_getter))
+        elsif setting(:owner_class)
+          if setting(:owners_owner)
+            base = send(setting(:owners_owner)).send(owner_class_name.pluralize)
           else
-            nil
+            base = owner_class
           end
-        rescue ActiveRecord::RecordNotFound
-          raise RecordNotFound
+          base.find_by!(owner_lookup_field => params[owner_lookup_param])
+        else
+          nil
         end
+      rescue ActiveRecord::RecordNotFound
+        raise RecordNotFound
       end
+    end
 
-      def presenter
-        setting(:presenter)
-      end
+    def presenter
+      setting(:presenter)
+    end
 
-      def presenter_args
-        setting(:presenter_args)
-      end
+    def presenter_args
+      setting(:presenter_args)
+    end
 
-      def resource
-        @resource ||= begin
-          if setting(:has_one)
-            owner.send(resource_class_name)
-          elsif owner && owner.respond_to?(resource_class_name.pluralize)
-            owner
-              .send(resource_class_name.pluralize)
-              .find_by!(resource_lookup_param => params[resource_lookup_param])
-          else
-            begin NoMethodError
-                  send(:find)
-            rescue
-              raise 'Rapido::Controller must belong to something that has many or has one of resource, or define a find method'
-            end
+    def resource
+      @resource ||= begin
+        if setting(:has_one)
+          owner.send(resource_class_name)
+        elsif owner && owner.respond_to?(resource_class_name.pluralize)
+          owner
+            .send(resource_class_name.pluralize)
+            .find_by!(resource_lookup_param => params[resource_lookup_param])
+        else
+          begin
+            send(:find)
+          rescue  NoMethodError => _e
+            raise 'Rapido::Controller must belong to something that has many or has one of resource, or define a find method'
           end
-       rescue ActiveRecord::RecordNotFound
-         raise RecordNotFound
         end
+     rescue ActiveRecord::RecordNotFound
+       raise RecordNotFound
       end
+    end
 
-      def resource_class
-        @resource_class ||= resource_class_name.to_s.camelize.constantize
-      end
+    def resource_class
+      @resource_class ||= resource_class_name.to_s.camelize.constantize
+    end
 
-      def resource_class_name
-        self.class.resource_class_name
-      end
+    def resource_class_name
+      self.class.resource_class_name
+    end
 
       # Todo: FIXME
-      def resource_collection
-        @resource_collection ||= begin
-          if setting(:has_one)
-            owner.send(resource_class_name)
-          else
-            owner.send(resource_class_name.pluralize)
-          end
+    def resource_collection
+      @resource_collection ||= begin
+        if setting(:has_one)
+          owner.send(resource_class_name)
+        else
+          owner.send(resource_class_name.pluralize)
         end
       end
+    end
 
-      def resource_lookup_param
-        @resource_lookup_param ||=
-          setting(:resource_lookup_param) || :id
-      end
+    def resource_lookup_param
+      @resource_lookup_param ||=
+        setting(:resource_lookup_param) || :id
+    end
 
-      def resource_permitted_params
-        @resource_permitted_params ||=
-          setting(:resource_permitted_params)
-      end
+    def resource_permitted_params
+      @resource_permitted_params ||=
+        setting(:resource_permitted_params)
+    end
 
-      def resource_params
-        return {} if setting(:permit_no_params)
-        base = params.require(resource_class_name)
-        base.permit(resource_permitted_params)
-      end
+    def resource_params
+      return {} if setting(:permit_no_params)
+      base = params.require(resource_class_name)
+      base.permit(resource_permitted_params)
+    end
 
-      def setting(var)
-        self.class.instance_variable_get("@#{var}")
-      end
+    def setting(var)
+      self.class.instance_variable_get("@#{var}")
+    end
   end
 end
