@@ -1,6 +1,6 @@
 Cucumber::Persona.define 'Ben Franklin' do
   account = Account.create!
-  user = User.create!(email: 'ben@franklin.com', password: 'Password1', account: account)
+  User.create!(email: 'ben@franklin.com', password: 'Password1', account: account)
   toolbox = account.toolboxes.create!(name: 'Okay Toolbox')
   toolbox.hydrospanners.create!(name: 'mediocrehydrospanner')
 end
