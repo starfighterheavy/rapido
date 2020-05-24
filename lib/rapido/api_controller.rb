@@ -32,7 +32,6 @@ module Rapido
 
     def create
       return if performed?
-      render json: present_resource(resource)
       before_build
       new_resource = build_resource(resource_params)
       before_create(new_resource)
