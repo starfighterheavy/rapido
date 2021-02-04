@@ -27,7 +27,15 @@ module Rapido
 
     def show
       return if performed?
-      render json: present_resource(resource)
+      if request.format.to_sym == :json
+        render json: present_resource(resource)
+      elsif request.format.to_sym == :xml
+        render xml: present_resource(resource)
+      elsif request.format.to_s.starts_with?("text/")
+        render plain: present_resource(resource).send("to_#{request.format.to_sym.to_s}")
+      else
+        render json: present_resource(resource)
+      end
     end
 
     def create
@@ -111,7 +119,7 @@ module Rapido
 
     def present_resource(resource)
       args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
-      return presenter.new(resource, *args).as_json if presenter
+      return presenter.new(resource, *args) if presenter
       resource.to_h
     end
 

@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'devise'
+gem 'listen'
 gem 'puma'
 gem 'rails', '~> 6.0'
 gem 'rails-rapido', path: '../../../rapido'

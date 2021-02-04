@@ -130,6 +130,7 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
     erubi (1.10.0)
+    ffi (1.14.2)
     gherkin (5.1.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -137,6 +138,9 @@ GEM
       concurrent-ruby (~> 1.0)
     jsonpath (1.1.0)
       multi_json
+    listen (3.4.1)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -199,6 +203,9 @@ GEM
       rake (>= 0.8.7)
       thor (~> 1.0)
     rake (13.0.3)
+    rb-fsevent (0.10.4)
+    rb-inotify (0.10.1)
+      ffi (~> 1.0)
     regexp_parser (2.0.3)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -258,6 +265,7 @@ DEPENDENCIES
   cucumber_priority
   database_cleaner
   devise
+  listen
   pry-byebug
   puma
   rails (~> 6.0)
