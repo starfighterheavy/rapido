@@ -28,7 +28,7 @@ class Api::MessagePresenter
 
   def empty?
     @message.nil?
-  end 
+  end
 
   private
 

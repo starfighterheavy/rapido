@@ -22,19 +22,19 @@ module Rapido
 
     def index
       return if performed?
-      render json: present_resource_collection(resource_collection)
+      render json: resource_collection_presenter
     end
 
     def show
       return if performed?
       if request.format.to_sym == :json
-        render json: present_resource(resource)
+        render json: resource_presenter
       elsif request.format.to_sym == :xml
-        render xml: present_resource(resource)
+        render xml: resource_presenter
       elsif request.format.to_s.starts_with?("text/")
-        render plain: present_resource(resource).send("to_#{request.format.to_sym.to_s}")
+        render plain: resource_presenter.send("to_#{request.format.to_sym}")
       else
-        render json: present_resource(resource)
+        render json: resource_presenter
       end
     end
 
@@ -46,7 +46,7 @@ module Rapido
       if new_resource.save
         after_create_success(new_resource)
         return if performed?
-        render json: present_resource(new_resource), status: :created
+        render json: resource_presenter(new_resource), status: :created
       else
         after_create_failure(new_resource)
         return if performed?
@@ -56,7 +56,7 @@ module Rapido
 
     def destroy
       return if performed?
-      resource_before_destruction = present_resource(resource)
+      resource_before_destruction = resource_presenter
       before_destroy
       resource.destroy
       after_destroy_success
@@ -72,7 +72,7 @@ module Rapido
       if resource.save
         after_update_success
         return if performed?
-        render json: present_resource(resource)
+        render json: resource_presenter
       else
         after_update_failure
         return if performed?
@@ -117,17 +117,28 @@ module Rapido
       head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
     end
 
-    def present_resource(resource)
-      args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
-      return presenter.new(resource, *args) if presenter
-      resource.to_h
+    def resource_presenter(new_resource = nil)
+      @resource_presenter ||= begin
+        args = presenter_args.nil? ? nil : presenter_args.map { |arg| params[arg] }
+        if presenter
+          presenter.new(new_resource || resource, *args)
+        else
+          (new_resource || resource).to_h
+        end
+      end
     end
 
-    def present_resource_collection(resource_collection)
-      args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
-      return collection_presenter.new(resource_collection, *args).as_json if collection_presenter
-      return resource_collection.map { |r| presenter.new(r).as_json } if presenter
-      resource_collection.map(&:to_h)
+    def resource_collection_presenter
+      @resource_collection_presenter ||= begin
+        args = collection_presenter_args.nil? ? nil : collection_presenter_args.map { |arg| params[arg] }
+        if collection_presenter
+          collection_presenter.new(resource_collection, *args)
+        elsif presenter
+          resource_collection.map { |r| presenter.new(r) }
+        else
+          resource_collection.map(&:to_h)
+        end
+      end
     end
   end
 end
