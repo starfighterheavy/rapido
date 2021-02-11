@@ -31,8 +31,8 @@ module Rapido
         render json: resource_presenter
       elsif request.format.to_sym == :xml
         render xml: resource_presenter
-      elsif request.format.to_s.starts_with?("text/")
-        render plain: resource_presenter.send("to_#{request.format.to_sym}")
+      elsif request.format.to_sym == :csv
+        render plain: resource_presenter.send("to_csv")
       else
         render json: resource_presenter
       end
