@@ -18,9 +18,9 @@ group :development, :test do
   gem 'cucumber', '~> 3'
   gem 'cucumber-api-steps', github: 'jayzes/cucumber-api-steps'
   gem 'cucumber-persona'
+  gem 'cucumber_priority'
   gem 'cucumber-rails', '~> 1.6', require: false
   gem 'cucumber-sammies'
-  gem 'cucumber_priority'
   gem 'database_cleaner'
   gem 'pry-byebug'
   gem 'rspec-rails'
