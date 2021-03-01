@@ -28,11 +28,23 @@ module Rapido
     def show
       return if performed?
       if request.format.to_sym == :json
-        render json: resource_presenter
+        if(params["filename"])
+          send_data resource_presenter.as_json.to_json, filename: params["filename"]
+        else
+          render json: resource_presenter
+        end
       elsif request.format.to_sym == :xml
-        render xml: resource_presenter
+        if(params["filename"])
+          send_data resource_presenter.to_xml, filename: params["filename"]
+        else
+          render xml: resource_presenter
+        end
       elsif request.format.to_sym == :csv
-        render plain: resource_presenter.send("to_csv")
+        if(params["filename"])
+          send_data resource_presenter.to_csv, filename: params["filename"]
+        else
+          render plain: resource_presenter.send("to_csv")
+        end
       else
         render json: resource_presenter
       end
