@@ -10,10 +10,13 @@ class Api::ApplicationController < ActionController::API
 
   def load_authority
     @authority = Account.find_by(api_key: params[:api_key])
-    raise LackAuthority unless @authority
   end
 
   def authority
     @authority
+  end
+
+  def check_authority
+    authority.present?
   end
 end

@@ -11,13 +11,7 @@ Feature: Hydrospanners
       "name": "greatspanner"
     }
     """
-    Then the JSON response should be:
-    """
-    {
-      "error": "Request denied."
-    }
-    """
-    And the response status should be "401"
+    Then the response status should be "401"
 
   Scenario: Post a Hydrospanner
     When I send a POST request to "/api/toolboxes/okaybox/hydrospanners?api_key=ABCDE" with the following:
