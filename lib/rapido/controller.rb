@@ -28,6 +28,10 @@ module Rapido
         @allowed_actions = ary
       end
 
+      def allow_if(str = nil, &block)
+        @allow_if = str || block
+      end
+
       def attr_permitted(*ary)
         @resource_permitted_params = ary
       end
@@ -99,6 +103,10 @@ module Rapido
 
     def allowed_actions
       setting(:allowed_actions)
+    end
+
+    def allow_if
+      setting(:allow_if)
     end
 
     def build_resource(params = {})

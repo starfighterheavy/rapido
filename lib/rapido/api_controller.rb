@@ -18,6 +18,8 @@ module Rapido
       end
 
       before_action :permit_only_allowed_actions
+
+      before_action :permit_only_if
     end
 
     def index
@@ -127,6 +129,14 @@ module Rapido
     def permit_only_allowed_actions
       return unless allowed_actions
       head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
+    end
+
+    def permit_only_if
+      if(allow_if)
+        unless (allow_if.is_a?(Symbol) ? send(allow_if) : instance_eval(&allow_if))
+          head :unauthorized
+        end
+      end
     end
 
     def resource_presenter(new_resource = nil)

@@ -11,13 +11,7 @@ Feature: Toolboxes
       "name": "greatbox"
     }
     """
-    Then the JSON response should be:
-    """
-    {
-      "error": "Request denied."
-    }
-    """
-    And the response status should be "401"
+    Then the response status should be "401"
 
   Scenario: Post a toolbox
     When I send a POST request to "/api/toolboxes?api_key=ABCDE" with the following:
