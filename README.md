@@ -14,8 +14,14 @@ Below is a typical example of a class using Rapido. More examples are available 
 
 class DocumentsController < ApplicationController
   include Rapido::ApiController
+
+  allow_if do
+    current_user.is_editor?
+  end
+
+  allow_only :create, :delete, :index, :show, :update
   
-  attr_permitted :file, file_name, :category
+  attr_permitted :file, :file_name, :category
   
   belongs_to :user, getter: :current_user
   
@@ -45,6 +51,14 @@ end
 ```
 
 ## API
+
+### `allow_if`
+
+Accepts a method name as symbol or block. Method supplied or block must return true to allow the action to proceed, otherwise a status 401 is returned with no body.
+
+### `allow_only`
+
+Accepts a list of symbols. These symbols specify the controller actions that are allowed for this controller.
 
 ### `attr_permitted`
 
