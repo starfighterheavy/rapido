@@ -9,7 +9,7 @@ GIT
 PATH
   remote: ../..
   specs:
-    rails-rapido (0.9.4)
+    rails-rapido (0.9.5)
 
 GEM
   remote: https://rubygems.org/

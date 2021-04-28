@@ -29,7 +29,13 @@ module Rapido
 
     def show
       return if performed?
-      if request.format.to_sym == :json
+      if request.format.to_sym == :html
+        if(params["filename"])
+          send_data resource_presenter.to_html, filename: params["filename"]
+        else
+          render html: resource_presenter.to_html.html_safe
+        end
+      elsif request.format.to_sym == :json
         if(params["filename"])
           send_data resource_presenter.as_json.to_json, filename: params["filename"]
         else
