@@ -29,7 +29,7 @@ module Rapido
 
     def show
       return if performed?
-      if request.format.to_sym == :html
+      if request.format.to_sym == :html && !request.xhr?
         if(params["filename"])
           send_data resource_presenter.to_html, filename: params["filename"]
         else
