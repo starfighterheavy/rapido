@@ -29,19 +29,13 @@ module Rapido
 
     def show
       return if performed?
-      
-      Rails.logger.info("Request format debug:")
-      Rails.logger.info(request.format.to_sym)
-      Rails.logger.info(request.xhr?)
-      Rails.logger.info(request.headers["accept"])
-
       if request.format.to_sym == :json
         if(params["filename"])
           send_data resource_presenter.as_json.to_json, filename: params["filename"]
         else
           render json: resource_presenter
         end
-      elsif request.format.to_sym == :html && request.headers["accept"] != "application/json"
+      elsif request.format.to_sym == :html && !request.headers["accept"].include?("application/json")
         if(params["filename"])
           send_data resource_presenter.to_html, filename: params["filename"]
         else
