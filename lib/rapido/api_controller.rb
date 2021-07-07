@@ -35,6 +35,12 @@ module Rapido
         else
           render json: resource_presenter
         end
+      elsif request.format.to_sym == :html && !request.headers["accept"].include?("application/json")
+        if(params["filename"])
+          send_data resource_presenter.to_html, filename: params["filename"]
+        else
+          render html: resource_presenter.to_html.html_safe
+        end
       elsif request.format.to_sym == :xml
         if(params["filename"])
           send_data resource_presenter.to_xml, filename: params["filename"]
