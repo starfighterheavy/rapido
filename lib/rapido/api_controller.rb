@@ -24,7 +24,27 @@ module Rapido
 
     def index
       return if performed?
-      render json: resource_collection_presenter
+      if request.format.to_sym == :json
+        if(params["filename"])
+          send_data resource_collection_presenter.as_json.to_json, filename: params["filename"]
+        else
+          render json: resource_collection_presenter
+        end
+      elsif request.format.to_sym == :xml
+        if(params["filename"])
+          send_data resource_collection_presenter.to_xml, filename: params["filename"]
+        else
+          render xml: resource_collection_presenter
+        end
+      elsif request.format.to_sym == :csv
+        if(params["filename"])
+          send_data resource_collection_presenter.to_csv, filename: params["filename"]
+        else
+          render plain: resource_collection_presenter.send("to_csv")
+        end
+      else
+        render json: resource_collection_presenter
+      end
     end
 
     def show

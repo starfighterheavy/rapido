@@ -78,15 +78,15 @@ Feature: Controllers that require no authority and use a presenter
     
     """
     When I send a GET request to "/api/comlinks/123/messages?query=how"
-    Then the JSON response should be:
+    Then the response should be:
     """
-    [
-      {
-        "content": "How's Aldaaran?",
-        "id": 1
-      }
-    ]
+    id,content
+    1,How's Aldaaran?
+
     """
+    Given I set headers:
+    |Content-Type|application/json|
+    |Accept|application/json|
     When I send a PATCH request to "/api/comlinks/123/messages/1" with the following:
     """
     {

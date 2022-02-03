@@ -7,6 +7,7 @@ end
 
 gem 'devise'
 gem 'listen'
+gem 'net-smtp', require: false
 gem 'puma'
 gem 'rails', '~> 6.0'
 gem 'rails-rapido', path: '../../../rapido'
