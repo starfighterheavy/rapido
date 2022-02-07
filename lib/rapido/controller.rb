@@ -28,6 +28,10 @@ module Rapido
         @allowed_actions = ary
       end
 
+      def allowed_formats(*ary)
+        @allowed_formats = ary
+      end
+
       def allow_if(str = nil, &block)
         @allow_if = str || block
       end
@@ -103,6 +107,10 @@ module Rapido
 
     def allowed_actions
       setting(:allowed_actions)
+    end
+
+    def allowed_formats
+      setting(:allowed_formats)
     end
 
     def allow_if

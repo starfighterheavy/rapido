@@ -1,6 +1,8 @@
 class Api::MessagesController < Api::ApplicationController
   include Rapido::ApiController
 
+  allowed_formats :csv, :json, :xml
+
   attr_permitted :content
 
   skip_before_action :load_authority

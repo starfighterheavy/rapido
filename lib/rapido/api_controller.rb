@@ -19,6 +19,8 @@ module Rapido
 
       before_action :permit_only_allowed_actions
 
+      before_action :permit_only_allowed_formats
+
       before_action :permit_only_if
     end
 
@@ -155,6 +157,14 @@ module Rapido
     def permit_only_allowed_actions
       return unless allowed_actions
       head :unauthorized unless allowed_actions.include?(params[:action].to_sym)
+    end
+
+    def permit_only_allowed_formats
+      f = params[:format]&.to_sym
+      unless (!f || f == :json) || (allowed_formats && allowed_formats.include?(f))
+        binding.pry
+        head :not_found
+      end
     end
 
     def permit_only_if
