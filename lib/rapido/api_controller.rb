@@ -44,6 +44,24 @@ module Rapido
         else
           render plain: resource_collection_presenter.send("to_csv")
         end
+      elsif request.format.to_sym == :xls
+        if(params["filename"])
+          send_data resource_collection_presenter.to_xls, filename: params["filename"]
+        else
+          render plain: resource_collection_presenter.send("to_xls")
+        end
+      elsif request.format.to_sym == :xlsx
+        if(params["filename"])
+          send_data resource_collection_presenter.to_xlsx, filename: params["filename"]
+        else
+          render plain: resource_collection_presenter.send("to_xlsx")
+        end
+      elsif request.format.to_sym == :pdf
+        if(params["filename"])
+          send_data resource_collection_presenter.to_pdf, filename: params["filename"]
+        else
+          render plain: resource_collection_presenter.send("to_pdf")
+        end
       else
         render json: resource_collection_presenter
       end
@@ -74,6 +92,24 @@ module Rapido
           send_data resource_presenter.to_csv, filename: params["filename"]
         else
           render plain: resource_presenter.send("to_csv")
+        end
+      elsif request.format.to_sym == :xls
+        if(params["filename"])
+          send_data resource_presenter.to_xlsx, filename: params["filename"]
+        else
+          render plain: resource_presenter.send("to_xls")
+        end
+      elsif request.format.to_sym == :xlsx
+        if(params["filename"])
+          send_data resource_presenter.to_xlsx, filename: params["filename"]
+        else
+          render plain: resource_presenter.send("to_xlsx")
+        end
+      elsif request.format.to_sym == :pdf
+        if(params["filename"])
+          send_data resource_presenter.to_pdf, filename: params["filename"]
+        else
+          render plain: resource_presenter.send("to_pdf")
         end
       else
         render json: resource_presenter
@@ -162,7 +198,6 @@ module Rapido
     def permit_only_allowed_formats
       f = params[:format]&.to_sym
       unless (!f || f == :json) || (allowed_formats && allowed_formats.include?(f))
-        binding.pry
         head :not_found
       end
     end
