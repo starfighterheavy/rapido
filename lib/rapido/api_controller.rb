@@ -26,37 +26,38 @@ module Rapido
 
     def index
       return if performed?
-      if request.format.to_sym == :json
+      f = (params["format"] || request.format).to_sym
+      if f == :json
         if(params["filename"])
           send_data resource_collection_presenter.as_json.to_json, filename: params["filename"]
         else
           render json: resource_collection_presenter
         end
-      elsif request.format.to_sym == :xml
+      elsif f == :xml
         if(params["filename"])
           send_data resource_collection_presenter.to_xml, filename: params["filename"]
         else
           render xml: resource_collection_presenter
         end
-      elsif request.format.to_sym == :csv
+      elsif f == :csv
         if(params["filename"])
           send_data resource_collection_presenter.to_csv, filename: params["filename"]
         else
           render plain: resource_collection_presenter.send("to_csv")
         end
-      elsif request.format.to_sym == :xls
+      elsif f == :xls
         if(params["filename"])
           send_data resource_collection_presenter.to_xls, filename: params["filename"]
         else
           render plain: resource_collection_presenter.send("to_xls")
         end
-      elsif request.format.to_sym == :xlsx
+      elsif f == :xlsx
         if(params["filename"])
           send_data resource_collection_presenter.to_xlsx, filename: params["filename"]
         else
           render plain: resource_collection_presenter.send("to_xlsx")
         end
-      elsif request.format.to_sym == :pdf
+      elsif f == :pdf
         if(params["filename"])
           send_data resource_collection_presenter.to_pdf, filename: params["filename"]
         else
@@ -69,43 +70,44 @@ module Rapido
 
     def show
       return if performed?
-      if request.format.to_sym == :json
+      f = (params["format"] || request.format).to_sym
+      if f == :json
         if(params["filename"])
           send_data resource_presenter.as_json.to_json, filename: params["filename"]
         else
           render json: resource_presenter
         end
-      elsif request.format.to_sym == :html && !request.headers["accept"].include?("application/json")
+      elsif f == :html && !request.headers["accept"].include?("application/json")
         if(params["filename"])
           send_data resource_presenter.to_html, filename: params["filename"]
         else
           render html: resource_presenter.to_html.html_safe
         end
-      elsif request.format.to_sym == :xml
+      elsif f == :xml
         if(params["filename"])
           send_data resource_presenter.to_xml, filename: params["filename"]
         else
           render xml: resource_presenter
         end
-      elsif request.format.to_sym == :csv
+      elsif f == :csv
         if(params["filename"])
           send_data resource_presenter.to_csv, filename: params["filename"]
         else
           render plain: resource_presenter.send("to_csv")
         end
-      elsif request.format.to_sym == :xls
+      elsif f == :xls
         if(params["filename"])
           send_data resource_presenter.to_xlsx, filename: params["filename"]
         else
           render plain: resource_presenter.send("to_xls")
         end
-      elsif request.format.to_sym == :xlsx
+      elsif f == :xlsx
         if(params["filename"])
           send_data resource_presenter.to_xlsx, filename: params["filename"]
         else
           render plain: resource_presenter.send("to_xlsx")
         end
-      elsif request.format.to_sym == :pdf
+      elsif f == :pdf
         if(params["filename"])
           send_data resource_presenter.to_pdf, filename: params["filename"]
         else

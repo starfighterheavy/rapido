@@ -86,6 +86,16 @@ Feature: Controllers that require no authority and use a presenter
     """
     Given I set headers:
     |Content-Type|application/json|
+    |Accept||
+    When I send a GET request to "/api/comlinks/123/messages/1.csv?filename=download.csv"
+    Then the response should be:
+    """
+    id,content
+    1,How's Aldaaran?
+    
+    """
+    Given I set headers:
+    |Content-Type|application/json|
     |Accept|application/json|
     When I send a PATCH request to "/api/comlinks/123/messages/1" with the following:
     """
