@@ -19,7 +19,7 @@ module Rapido
 
       before_action :permit_only_allowed_actions
 
-      before_action :permit_only_allowed_formats
+      before_action :permit_only_allowed_formats, only: [:index, :show]
 
       before_action :permit_only_if
     end
